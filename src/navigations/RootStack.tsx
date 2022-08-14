@@ -10,7 +10,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const RootStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="BottomTab" component={BottomTab} />
+      <Stack.Screen
+        name="BottomTab"
+        component={BottomTab}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 };
