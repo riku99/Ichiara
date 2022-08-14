@@ -18,9 +18,14 @@ export const HomeScreen = ({ navigation }: Props) => {
     })();
   }, []);
 
+  const onMapPress = async (event) => {
+    console.log('✋JS event');
+    console.log(event.nativeEvent);
+  };
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.mapView} />
+      <MapView style={styles.mapView} onMapPress={onMapPress} />
     </View>
   );
 };
