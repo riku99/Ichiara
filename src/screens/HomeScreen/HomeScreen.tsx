@@ -1,9 +1,8 @@
 import { useLayoutEffect } from 'react';
-import { requireNativeComponent, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { MapView } from 'src/NativeComponents/MapView';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
-
-const NativeMap = requireNativeComponent('Map');
 
 export const HomeScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
@@ -14,7 +13,7 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <NativeMap style={styles.mapView} />
+      <MapView style={styles.mapView} />
     </View>
   );
 };
@@ -24,7 +23,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mapView: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
 });
