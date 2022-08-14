@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { MapView } from 'src/NativeComponents/MapView';
+import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import LocationManager from 'src/NativeModules/LocationManager';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
@@ -18,8 +18,7 @@ export const HomeScreen = ({ navigation }: Props) => {
     })();
   }, []);
 
-  const onMapPress = async (event) => {
-    console.log('✋JS event');
+  const onMapPress = async (event: MapPressEvent) => {
     console.log(event.nativeEvent);
   };
 
