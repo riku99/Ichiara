@@ -12,9 +12,8 @@ class MapView: MKMapView {
   }
   
   func setupMap() {
-//    mapView.showsUserLocation = true
-//    mapView.userTrackingMode = MKUserTrackingMode.followWithHeading
-    self.backgroundColor = .blue
+    self.showsUserLocation = true
+    self.userTrackingMode = MKUserTrackingMode.followWithHeading
   }
   
   required init?(coder _: NSCoder) {
