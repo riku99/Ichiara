@@ -2,9 +2,7 @@ import Foundation
 import UIKit
 import MapKit
 
-class MapView: MKMapView {
-  var locationManager: CLLocationManager!
-  
+class MapView: MKMapView {  
   @objc var onMapPress: RCTBubblingEventBlock?
   
   override public init (frame: CGRect) {

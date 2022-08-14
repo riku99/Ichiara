@@ -14,6 +14,10 @@ class LocationManager: NSObject {
       locationManager.requestWhenInUseAuthorization()
     }
   }
+  
+  @objc static func requiresMainQueueSetup() -> Bool {
+    return false
+  }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
