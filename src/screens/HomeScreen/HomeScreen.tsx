@@ -1,6 +1,7 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MapView } from 'src/NativeComponents/MapView';
+import LocationManager from 'src/NativeModules/LocationManager';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
@@ -10,6 +11,12 @@ export const HomeScreen = ({ navigation }: Props) => {
       headerShown: false,
     });
   }, [navigation]);
+
+  useEffect(() => {
+    (async () => {
+      await LocationManager.requestWhenInUseAuthorization();
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
