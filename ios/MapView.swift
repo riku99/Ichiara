@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import MapKit
+import CoreLocation
 
 class MapView: MKMapView {  
   @objc var onMapPress: RCTBubblingEventBlock?
@@ -24,13 +25,32 @@ class MapView: MKMapView {
     if sender.state == .ended {
       let tapPoint = sender.location(in: self)
       let coordinate = self.convert(tapPoint, toCoordinateFrom: self)
-      if let onPress = self.onMapPress {
-        onPress(["latitude": coordinate.latitude, "longitude": coordinate.longitude])
-      }
+      let annotation = MKPointAnnotation()
+      annotation.coordinate = coordinate
+      self.addAnnotation(annotation)
+      
+      let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+      CLGeocoder().reverseGeocodeLocation(location, completionHandler: { placemarks, error in
+        let placemark = placemarks?.first
+        
+        if let onPress = self.onMapPress {
+          if let p = placemark {
+            let address = "\(p.administrativeArea ?? "")\(p.locality ?? "")\(p.thoroughfare ?? "")\(p.subThoroughfare ?? "")"
+            onPress(["latitude": coordinate.latitude, "longitude": coordinate.longitude, "address": address])
+          } else {
+            onPress(["latitude": coordinate.latitude, "longitude": coordinate.longitude,])
+          }
+        }
+      })
     }
   }
   
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) is not implemented.")
   }
+}
+
+enum MapPressEvent {
+  case Location(CLLocationDegrees)
+  case Placemark(CLPlacemark)
 }
