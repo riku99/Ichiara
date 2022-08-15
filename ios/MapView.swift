@@ -33,13 +33,14 @@ class MapView: MKMapView {
       CLGeocoder().reverseGeocodeLocation(location, completionHandler: { placemarks, error in
         let placemark = placemarks?.first
         
+        var eventData: [String: Any] = ["latitude": coordinate.latitude, "longitude": coordinate.longitude]
+        
         if let onPress = self.onMapPress {
           if let p = placemark {
             let address = "\(p.administrativeArea ?? "")\(p.locality ?? "")\(p.thoroughfare ?? "")\(p.subThoroughfare ?? "")"
-            onPress(["latitude": coordinate.latitude, "longitude": coordinate.longitude, "address": address])
-          } else {
-            onPress(["latitude": coordinate.latitude, "longitude": coordinate.longitude,])
+            eventData["address"] = address
           }
+          onPress(eventData)
         }
       })
     }
@@ -48,9 +49,4 @@ class MapView: MKMapView {
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) is not implemented.")
   }
-}
-
-enum MapPressEvent {
-  case Location(CLLocationDegrees)
-  case Placemark(CLPlacemark)
 }
