@@ -14,7 +14,12 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     (async () => {
-      await LocationManager.requestWhenInUseAuthorization();
+      try {
+        await LocationManager.requestWhenInUseAuthorization();
+      } catch (e) {
+        console.log('⚠️Error!!');
+        console.log(e);
+      }
     })();
   }, []);
 

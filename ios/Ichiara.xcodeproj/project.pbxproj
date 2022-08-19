@@ -16,6 +16,7 @@
 		327257F828A8E8D80054B36B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		327257FA28A903110054B36B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257F928A903100054B36B /* LocationManager.swift */; };
 		327257FC28A904340054B36B /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 327257FB28A904340054B36B /* LocationManager.m */; };
+		327257FE28AE6B460054B36B /* LocationManagerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257FD28AE6B440054B36B /* LocationManagerError.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		96905EF65AED1B983A6B3ABC /* libPods-Ichiara.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Ichiara.a */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
@@ -36,6 +37,7 @@
 		327257F628A8CCC40054B36B /* MapManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapManager.m; sourceTree = "<group>"; };
 		327257F928A903100054B36B /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		327257FB28A904340054B36B /* LocationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
+		327257FD28AE6B440054B36B /* LocationManagerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManagerError.swift; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Ichiara.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Ichiara.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-Ichiara.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ichiara.debug.xcconfig"; path = "Target Support Files/Pods-Ichiara/Pods-Ichiara.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Ichiara.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ichiara.release.xcconfig"; path = "Target Support Files/Pods-Ichiara/Pods-Ichiara.release.xcconfig"; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				327257F428A8C7CC0054B36B /* MapManager.swift */,
 				327257F628A8CCC40054B36B /* MapManager.m */,
 				327257F928A903100054B36B /* LocationManager.swift */,
+				327257FD28AE6B440054B36B /* LocationManagerError.swift */,
 				327257FB28A904340054B36B /* LocationManager.m */,
 				327257F328A8C7AC0054B36B /* Ichiara-Bridging-Header.h */,
 			);
@@ -312,6 +315,7 @@
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				327257F728A8CCC40054B36B /* MapManager.m in Sources */,
 				B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */,
+				327257FE28AE6B460054B36B /* LocationManagerError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

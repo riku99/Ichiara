@@ -11,12 +11,13 @@ class MapView: MKMapView {
     setupMap()
   }
   
-  override func didSetProps(_ changedProps: [String]!) {
-  }
-  
   func setupMap() {
     self.showsUserLocation = true
     self.userTrackingMode = MKUserTrackingMode.followWithHeading
+    var region = self.region
+    region.span.latitudeDelta = 0.1
+    region.span.latitudeDelta = 0.1
+    self.setRegion(region, animated: true)
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
     self.addGestureRecognizer(tapGesture)
   }

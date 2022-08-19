@@ -6,7 +6,9 @@ type LatLng = {
 };
 
 export type MapPressEvent = {
-  nativeEvent: LatLng;
+  nativeEvent: LatLng & {
+    address?: string
+  }
 };
 
 export type MapViewProps = ViewProps & {
