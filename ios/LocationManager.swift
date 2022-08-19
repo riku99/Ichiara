@@ -6,25 +6,27 @@ import UIKit
 class LocationManager: NSObject {
   var locationManager = CLLocationManager()
   
-  @objc
-  func requestWhenInUseAuthorization(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+  override init() {
+    super.init()
     locationManager.delegate = self
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    if CLLocationManager.locationServicesEnabled() {
-      locationManager.requestWhenInUseAuthorization()
-    } else {
-      reject("locationServicesNotEnabled", "端末の位置情報サービスが許可されていません", nil)
-    }
   }
   
-//  @objc
-//  func requestAlwaysAuthorization() {
-//    locationManager.delegate = self
-//    locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//    if CLLocationManager.locationServicesEnabled() {
-//      locationManager.requestAlwaysAuthorization()
-//    }
-//  }
+  @objc
+  func locationServicesEnabled(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let isEnabled = CLLocationManager.locationServicesEnabled()
+    resolve(isEnabled)
+  }
+  
+  @objc
+  func requestWhenInUseAuthorization() {
+    locationManager.requestWhenInUseAuthorization()
+  }
+  
+  @objc
+  func requestAlwaysAuthorization() {
+    locationManager.requestAlwaysAuthorization()
+  }
   
   @objc static func requiresMainQueueSetup() -> Bool {
     return false

@@ -14,12 +14,14 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     (async () => {
-      try {
-        await LocationManager.requestWhenInUseAuthorization();
-      } catch (e) {
-        console.log('⚠️Error!!');
-        console.log(e);
-      }
+      const result = await LocationManager.locationServicesEnabled();
+      console.log('✋ result is ' + result);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await LocationManager.requestWhenInUseAuthorization();
     })();
   }, []);
 
