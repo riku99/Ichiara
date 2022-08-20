@@ -29,6 +29,11 @@ class LocationManager: RCTEventEmitter {
   }
   
   @objc
+  override func supportedEvents() -> [String]! {
+    return ["onAuthorizationStatusDidChange"]
+  }
+  
+  @objc
   override static func requiresMainQueueSetup() -> Bool {
     return false
   }
