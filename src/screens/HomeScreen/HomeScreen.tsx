@@ -26,7 +26,6 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     (async () => {
       const result = await Location.locationServicesEnabled();
-      console.log('✋ result is ' + result);
     })();
   }, []);
 

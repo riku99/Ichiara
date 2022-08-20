@@ -39,6 +39,10 @@ extension LocationManager: CLLocationManagerDelegate {
     
   }
   
+  func sendAuthorizationChangedEvent(_ status: String!) {
+    return sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": status])
+  }
+  
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     var status: CLAuthorizationStatus!
     if #available(iOS 14.0, *) {
@@ -48,13 +52,19 @@ extension LocationManager: CLLocationManagerDelegate {
     }
     switch status {
     case .notDetermined:
-      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "notDetermined"])
+      sendAuthorizationChangedEvent("notDetermined")
+      break
+    case .denied:
+      sendAuthorizationChangedEvent("denied")
+      break
+    case .restricted:
+      sendAuthorizationChangedEvent("restricted")
       break
     case .authorizedWhenInUse:
-      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "authorizedWhenInUse"])
+      sendAuthorizationChangedEvent("authorizedWhenInUse")
       break
     case .authorizedAlways:
-      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "authorizedAlways"])
+      sendAuthorizationChangedEvent("authorizedAlways")
     default:
       break
     }
