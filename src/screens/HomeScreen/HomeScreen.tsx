@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
-import LocationManager from 'src/NativeModules/LocationManager';
+import * as Location from 'src/NativeModules/Location';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
@@ -13,15 +13,26 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   useEffect(() => {
+    const subscription = Location.authorizationChangedListener((event) => {
+      console.log('🌙 event is ');
+      console.log(event);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
     (async () => {
-      const result = await LocationManager.locationServicesEnabled();
+      const result = await Location.locationServicesEnabled();
       console.log('✋ result is ' + result);
     })();
   }, []);
 
   useEffect(() => {
     (async () => {
-      await LocationManager.requestWhenInUseAuthorization();
+      await Location.requestWhenInUseAuthorization();
     })();
   }, []);
 

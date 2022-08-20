@@ -3,7 +3,7 @@ import CoreLocation
 import UIKit
 
 @objc(LocationManager)
-class LocationManager: NSObject {
+class LocationManager: RCTEventEmitter {
   var locationManager = CLLocationManager()
   
   override init() {
@@ -28,7 +28,8 @@ class LocationManager: NSObject {
     locationManager.requestAlwaysAuthorization()
   }
   
-  @objc static func requiresMainQueueSetup() -> Bool {
+  @objc
+  override static func requiresMainQueueSetup() -> Bool {
     return false
   }
 }
@@ -36,6 +37,27 @@ class LocationManager: NSObject {
 extension LocationManager: CLLocationManagerDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     
+  }
+  
+  func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    var status: CLAuthorizationStatus!
+    if #available(iOS 14.0, *) {
+      status = manager.authorizationStatus
+    } else {
+      status = CLLocationManager.authorizationStatus()
+    }
+    switch status {
+    case .notDetermined:
+      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "notDetermined"])
+      break
+    case .authorizedWhenInUse:
+      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "authorizedWhenInUse"])
+      break
+    case .authorizedAlways:
+      sendEvent(withName: "onAuthorizationStatusDidChange", body: ["status": "authorizedAlways"])
+    default:
+      break
+    }
   }
 }
 
