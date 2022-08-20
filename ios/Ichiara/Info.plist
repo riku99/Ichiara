@@ -35,6 +35,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>アラームを鳴らすために位置情報を使用します。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>アラームを鳴らすために位置情報を使用します。</string>
 	<key>UILaunchStoryboardName</key>

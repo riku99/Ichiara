@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 
@@ -13,20 +13,24 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   useEffect(() => {
-    const subscription = Location.authorizationChangedListener((event) => {
-      console.log('🌙 event is ');
-      console.log(event);
-    });
+    const subscription = Location.authorizationChangedListener(
+      async (event) => {
+        switch (event.status) {
+          case 'authorizedWhenInUse':
+            await Location.requestAlwaysAuthorization();
+            break;
+          case 'denied':
+            Alert.alert(
+              '位置情報の使用が許可されていません',
+              'アプリを使用するには端末の設定から位置情報をオンにしてください。'
+            );
+        }
+      }
+    );
 
     return () => {
       subscription.remove();
     };
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      const result = await Location.locationServicesEnabled();
-    })();
   }, []);
 
   useEffect(() => {

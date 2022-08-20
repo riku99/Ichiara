@@ -17,8 +17,12 @@ export const requestWhenInUseAuthorization = async (): Promise<void> => {
   await LocationManager.requestWhenInUseAuthorization();
 };
 
+export const requestAlwaysAuthorization = async (): Promise<void> => {
+  await LocationManager.requestAlwaysAuthorization();
+};
+
 export const authorizationChangedListener = (
-  listener: (event: AuthorizationChangedEvent) => void
+  listener: (event: AuthorizationChangedEvent) => Promise<void> | void
 ): EmitterSubscription => {
   const emitterSubsctiption = LocationEventEmitter.addListener(
     'onAuthorizationStatusDidChange',
