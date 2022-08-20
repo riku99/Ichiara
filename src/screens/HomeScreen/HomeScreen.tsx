@@ -1,11 +1,16 @@
-import { useEffect, useLayoutEffect } from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
+import { BottomSheetContent } from './BottonSheetContent';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
 export const HomeScreen = ({ navigation }: Props) => {
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ['12', '25%', '80%'], []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -46,6 +51,16 @@ export const HomeScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <MapView style={styles.mapView} onMapPress={onMapPress} />
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={1}
+        snapPoints={snapPoints}
+        backgroundStyle={{ backgroundColor: '#f7f7f7' }}
+        handleIndicatorStyle={{ backgroundColor: '#ababab' }}
+      >
+        <BottomSheetContent />
+      </BottomSheet>
     </View>
   );
 };
