@@ -1,6 +1,12 @@
 import BottomSheet from '@gorhom/bottom-sheet';
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+} from 'react';
+import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
@@ -48,6 +54,16 @@ export const HomeScreen = ({ navigation }: Props) => {
     console.log(event.nativeEvent);
   };
 
+  const raiseBottomSheet = () => {
+    bottomSheetRef.current?.snapToIndex(2);
+  };
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index !== 2) {
+      Keyboard.dismiss();
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <MapView style={styles.mapView} onMapPress={onMapPress} />
@@ -56,10 +72,11 @@ export const HomeScreen = ({ navigation }: Props) => {
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
-        backgroundStyle={{ backgroundColor: '#f7f7f7' }}
+        backgroundStyle={{ backgroundColor: '#fcfcfc' }}
         handleIndicatorStyle={{ backgroundColor: '#ababab' }}
+        onChange={handleSheetChanges}
       >
-        <BottomSheetContent />
+        <BottomSheetContent raiseBottomSheet={raiseBottomSheet} />
       </BottomSheet>
     </View>
   );
