@@ -3,7 +3,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapView: MKMapView, MKLocalSearchCompleterDelegate {
+class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   
   @objc var onMapPress: RCTBubblingEventBlock?
   
@@ -57,22 +57,12 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate {
   }
   
   func searchLocation(_ text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    // メインスレッドで実行しないとcompleterDidUpdateResultsが実行されない(?)
     DispatchQueue.main.async {
-      print("🌙 Swift MapView text is ")
-      print(text)
       self.searchCompleter.queryFragment = text
       self.searchLocationResolver = resolve
       self.searchLocationRjecter = reject
     }
-  }
-  
-  func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-    print("Update Success😆")
-    let results = completer.results.compactMap { (result) -> String? in
-      print(result.title)
-      return result.title
-    }
-    self.searchLocationResolver?(results)
   }
   
   required init?(coder _: NSCoder) {
@@ -80,8 +70,11 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate {
   }
 }
 
-extension MapView: MKMapViewDelegate {
-  func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-    
+extension MapView {
+  func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+    let results = completer.results.compactMap { (result) -> [String: String] in
+      return ["title": result.title, "subtitle": result.subtitle]
+    }
+    self.searchLocationResolver?(results)
   }
 }

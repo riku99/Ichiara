@@ -4,7 +4,7 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import { MapViewProps } from './types';
+import { MapViewProps, SearchLocationResult } from './types';
 
 const NativeMap = requireNativeComponent<MapViewProps>('Map');
 const MapModule = NativeModules.MapManager;
@@ -19,10 +19,8 @@ export class MapView extends React.Component<MapViewProps> {
     this.ref = React.createRef<RefType>();
   }
 
-  async searchLocation(text: string): Promise<string[]> {
+  async searchLocation(text: string): Promise<SearchLocationResult> {
     const results = await MapModule.searchLocation(text);
-    console.log('😆 JS results is ');
-    console.log(results);
     return results;
   }
 
