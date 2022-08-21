@@ -14,6 +14,7 @@ import { BottomSheetContent } from './BottonSheetContent';
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
 export const HomeScreen = ({ navigation }: Props) => {
+  const mapRef = useRef<MapView>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['12', '25%', '80%'], []);
 
@@ -64,9 +65,13 @@ export const HomeScreen = ({ navigation }: Props) => {
     }
   }, []);
 
+  const searchLocation = async (text: string) => {
+    await mapRef.current?.searchLocation(text);
+  };
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.mapView} onMapPress={onMapPress} />
+      <MapView style={styles.mapView} onMapPress={onMapPress} ref={mapRef} />
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -76,7 +81,10 @@ export const HomeScreen = ({ navigation }: Props) => {
         handleIndicatorStyle={{ backgroundColor: '#ababab' }}
         onChange={handleSheetChanges}
       >
-        <BottomSheetContent raiseBottomSheet={raiseBottomSheet} />
+        <BottomSheetContent
+          raiseBottomSheet={raiseBottomSheet}
+          searchLocation={searchLocation}
+        />
       </BottomSheet>
     </View>
   );

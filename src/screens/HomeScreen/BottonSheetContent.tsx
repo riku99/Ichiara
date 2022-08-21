@@ -4,9 +4,13 @@ import { Keyboard, Pressable, StyleSheet } from 'react-native';
 
 type Props = {
   raiseBottomSheet: () => void;
+  searchLocation: (text: string) => Promise<void>;
 };
 
-export const BottomSheetContent = ({ raiseBottomSheet }: Props) => {
+export const BottomSheetContent = ({
+  raiseBottomSheet,
+  searchLocation,
+}: Props) => {
   const tapContainer = () => {
     Keyboard.dismiss();
   };
@@ -18,6 +22,9 @@ export const BottomSheetContent = ({ raiseBottomSheet }: Props) => {
   return (
     <Pressable style={styles.container} onPress={tapContainer}>
       <Input
+        onChangeText={async (text) => {
+          await searchLocation(text);
+        }}
         onFocus={onSearchInputFocus}
         inputStyle={{
           fontSize: 16,

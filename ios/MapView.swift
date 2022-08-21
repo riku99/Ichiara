@@ -3,8 +3,13 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class MapView: MKMapView {  
+class MapView: MKMapView, MKLocalSearchCompleterDelegate {
+  
   @objc var onMapPress: RCTBubblingEventBlock?
+  
+  var searchCompleter = MKLocalSearchCompleter()
+  var searchLocationResolver: RCTPromiseResolveBlock?
+  var searchLocationRjecter: RCTPromiseRejectBlock?
   
   override public init (frame: CGRect) {
     super.init(frame: frame)
@@ -14,13 +19,14 @@ class MapView: MKMapView {
   func setupMap() {
     self.showsUserLocation = true
     self.userTrackingMode = MKUserTrackingMode.followWithHeading
-    self.delegate = self
     var region = self.region
     region.span.latitudeDelta = 0.1
     region.span.latitudeDelta = 0.1
     self.setRegion(region, animated: true)
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
     self.addGestureRecognizer(tapGesture)
+    self.delegate = self
+    searchCompleter.delegate = self
   }
   
   @objc func mapTapped(_ sender: UITapGestureRecognizer) {
@@ -48,6 +54,25 @@ class MapView: MKMapView {
         }
       })
     }
+  }
+  
+  func searchLocation(_ text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    DispatchQueue.main.async {
+      print("🌙 Swift MapView text is ")
+      print(text)
+      self.searchCompleter.queryFragment = text
+      self.searchLocationResolver = resolve
+      self.searchLocationRjecter = reject
+    }
+  }
+  
+  func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+    print("Update Success😆")
+    let results = completer.results.compactMap { (result) -> String? in
+      print(result.title)
+      return result.title
+    }
+    self.searchLocationResolver?(results)
   }
   
   required init?(coder _: NSCoder) {
