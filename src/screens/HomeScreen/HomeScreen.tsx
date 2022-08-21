@@ -16,7 +16,7 @@ type Props = RootNavigationScreenProp<'BottomTab'>;
 export const HomeScreen = ({ navigation }: Props) => {
   const mapRef = useRef<MapView>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['12', '25%', '80%'], []);
+  const snapPoints = useMemo(() => ['12', '25%', '90%'], []);
 
   useLayoutEffect(() => {
     navigation.setOptions({

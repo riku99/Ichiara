@@ -1,8 +1,18 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Input, Text } from '@rneui/themed';
-import React, { useState } from 'react';
-import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
-import { SearchLocationResult } from 'src/NativeComponents/MapView';
+import React, { useCallback, useState } from 'react';
+import {
+  FlatList,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {
+  SearchLocationResult,
+  SearchLocationResultData,
+} from 'src/NativeComponents/MapView';
 
 type Props = {
   raiseBottomSheet: () => void;
@@ -31,34 +41,61 @@ export const BottomSheetContent = ({
     setSuggestedLocation(result);
   };
 
+  const renderSuggestedLocation = useCallback(
+    ({ item }: { item: SearchLocationResultData }) => {
+      if (!item.title) {
+        return null;
+      }
+
+      return (
+        <Pressable style={styles.suggestedLocation}>
+          <Text style={styles.suggestedLocationTitle}>{item.title}</Text>
+          <Text style={styles.suggestedLocationSubtitle}>
+            {item.subtitle ?? ''}
+          </Text>
+        </Pressable>
+      );
+    },
+    []
+  );
+
   return (
-    <Pressable style={styles.container} onPress={tapContainer}>
-      <Input
-        onChangeText={onChangeSearchInputText}
-        onFocus={onSearchInputFocus}
-        inputStyle={styles.inputStyle}
-        inputContainerStyle={styles.inputContainerStyle}
-        placeholderTextColor={INPUT_PLACEHOLDER_COLOR}
-        placeholder="マップで検索"
-        leftIcon={
-          <AntDesign
-            name="search1"
-            size={SEARCH_INPUT_TEXT_SIZE}
-            color={INPUT_PLACEHOLDER_COLOR}
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={tapContainer}>
+        <>
+          <Input
+            onChangeText={onChangeSearchInputText}
+            onFocus={onSearchInputFocus}
+            inputStyle={styles.inputStyle}
+            inputContainerStyle={styles.inputContainerStyle}
+            placeholderTextColor={INPUT_PLACEHOLDER_COLOR}
+            containerStyle={{
+              paddingHorizontal: 0,
+              height: 42,
+            }}
+            placeholder="マップで検索"
+            leftIcon={
+              <AntDesign
+                name="search1"
+                size={SEARCH_INPUT_TEXT_SIZE}
+                color={INPUT_PLACEHOLDER_COLOR}
+              />
+            }
           />
-        }
-      />
-      {suggestedLocation.map((location, index) => (
-        <React.Fragment key={index}>
-          {location.title && (
-            <View>
-              <Text>{location.title}</Text>
-              <Text>{location.subtitle ?? ''}</Text>
-            </View>
-          )}
-        </React.Fragment>
-      ))}
-    </Pressable>
+
+          <FlatList
+            data={suggestedLocation}
+            renderItem={renderSuggestedLocation}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.suggestedLocationList}
+            ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+            ListFooterComponent={() => (
+              <View style={styles.suggestedListFotter} />
+            )}
+          />
+        </>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -68,6 +105,7 @@ const SEARCH_INPUT_TEXT_SIZE = 16;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 16,
   },
   inputContainerStyle: {
     borderBottomWidth: 0,
@@ -78,5 +116,26 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     fontSize: SEARCH_INPUT_TEXT_SIZE,
+  },
+  suggestedLocationList: {
+    marginTop: 20,
+  },
+  suggestedListFotter: {
+    height: 16,
+  },
+  suggestedLocation: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#e3e3e3',
+    paddingBottom: 4,
+  },
+  suggestedLocationTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  suggestedLocationSubtitle: {
+    marginTop: 4,
+  },
+  itemSeparator: {
+    height: 10,
   },
 });

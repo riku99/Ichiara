@@ -15,7 +15,7 @@ export type MapViewProps = ViewProps & {
   onMapPress?: ({ nativeEvent }: MapPressEvent) => void;
 };
 
-type SearchLocationResultData = {
+export type SearchLocationResultData = {
   title?: string;
   subtitle?: string;
 };
