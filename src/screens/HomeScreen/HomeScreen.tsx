@@ -66,7 +66,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, []);
 
   const searchLocation = async (text: string) => {
-    await mapRef.current?.searchLocation(text);
+    return await mapRef.current?.searchLocation(text);
   };
 
   return (
@@ -77,8 +77,8 @@ export const HomeScreen = ({ navigation }: Props) => {
         ref={bottomSheetRef}
         index={1}
         snapPoints={snapPoints}
-        backgroundStyle={{ backgroundColor: '#fcfcfc' }}
-        handleIndicatorStyle={{ backgroundColor: '#ababab' }}
+        backgroundStyle={styles.bottomSheetBackground}
+        handleIndicatorStyle={styles.bottomSheetHandleIndicator}
         onChange={handleSheetChanges}
       >
         <BottomSheetContent
@@ -96,5 +96,11 @@ const styles = StyleSheet.create({
   },
   mapView: {
     flex: 1,
+  },
+  bottomSheetBackground: {
+    backgroundColor: '#fcfcfc',
+  },
+  bottomSheetHandleIndicator: {
+    backgroundColor: '#ababab',
   },
 });
