@@ -51,7 +51,7 @@ export const BottomSheetContent = ({
       }
 
       const onItemPress = async () => {
-        await searchCoodinate(item.subtitle);
+        const result = await searchCoodinate(item.subtitle);
       };
 
       return (

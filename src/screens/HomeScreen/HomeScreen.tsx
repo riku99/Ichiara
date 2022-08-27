@@ -71,7 +71,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   const searchCoodinate = async (query: string) => {
-    await mapRef.current?.searchCoodinate(query);
+    return await mapRef.current?.searchCoodinate(query);
   };
 
   return (

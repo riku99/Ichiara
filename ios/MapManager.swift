@@ -15,8 +15,8 @@ class MapManager: RCTViewManager {
   }
   
   @objc
-  func searchCoodinate(_ query: String!) {
-    mapView.searchCoodinate(query)
+  func searchCoodinate(_ query: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    mapView.searchCoodinate(query, resolve: resolve, rejecter: reject)
   }
   
   override static func requiresMainQueueSetup() -> Bool {

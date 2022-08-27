@@ -26,6 +26,7 @@ export class MapView extends React.Component<MapViewProps> {
 
   async searchCoodinate(query: string): Promise<void> {
     const result = await MapModule.searchCoodinate(query);
+    return result;
   }
 
   render() {

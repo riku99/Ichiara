@@ -64,19 +64,19 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     }
   }
   
-  func searchCoodinate(_ query: String!) {
+  func searchCoodinate(_ query: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     let searchRequest = MKLocalSearch.Request()
     searchRequest.naturalLanguageQuery = query
     let search = MKLocalSearch(request: searchRequest)
     search.start(completionHandler: {(response, error) in
       guard let response = response else {
-        // JS側にリジェクト返す
+        reject("notCoodinateFound", "位置情報が見つかりませんでした。", nil)
         return
       }
       
       let coodinate = response.mapItems[0].placemark.coordinate
-      print(coodinate)
-      // JS側でPromise完了させる
+      let data = ["lat": coodinate.latitude, "lng": coodinate.longitude]
+      resolve(data)
     })
   }
 }
