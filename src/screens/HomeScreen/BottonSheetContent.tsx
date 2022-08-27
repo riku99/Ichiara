@@ -17,11 +17,13 @@ import {
 type Props = {
   raiseBottomSheet: () => void;
   searchLocation: (text: string) => Promise<SearchLocationResult>;
+  searchCoodinate: (query: string) => Promise<void>;
 };
 
 export const BottomSheetContent = ({
   raiseBottomSheet,
   searchLocation,
+  searchCoodinate,
 }: Props) => {
   const [
     suggestedLocation,
@@ -38,21 +40,24 @@ export const BottomSheetContent = ({
 
   const onChangeSearchInputText = async (text: string) => {
     const result = await searchLocation(text);
+    console.log(result);
     setSuggestedLocation(result);
   };
 
   const renderSuggestedLocation = useCallback(
     ({ item }: { item: SearchLocationResultData }) => {
-      if (!item.title) {
+      if (!item.title || !item.subtitle || item.subtitle === '近くを検索') {
         return null;
       }
 
+      const onItemPress = async () => {
+        await searchCoodinate(item.subtitle);
+      };
+
       return (
-        <Pressable style={styles.suggestedLocation}>
+        <Pressable style={styles.suggestedLocation} onPress={onItemPress}>
           <Text style={styles.suggestedLocationTitle}>{item.title}</Text>
-          <Text style={styles.suggestedLocationSubtitle}>
-            {item.subtitle ?? ''}
-          </Text>
+          <Text style={styles.suggestedLocationSubtitle}>{item.subtitle}</Text>
         </Pressable>
       );
     },
@@ -126,7 +131,7 @@ const styles = StyleSheet.create({
   suggestedLocation: {
     borderBottomWidth: 0.5,
     borderBottomColor: '#e3e3e3',
-    paddingBottom: 4,
+    paddingBottom: 10,
   },
   suggestedLocationTitle: {
     fontWeight: 'bold',

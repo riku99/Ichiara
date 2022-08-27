@@ -14,6 +14,11 @@ class MapManager: RCTViewManager {
     mapView.searchLocation(text, resolve: resolve, rejecter: reject)
   }
   
+  @objc
+  func searchCoodinate(_ query: String!) {
+    mapView.searchCoodinate(query)
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }

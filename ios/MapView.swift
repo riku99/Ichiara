@@ -16,6 +16,10 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     setupMap()
   }
   
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) is not implemented.")
+  }
+  
   func setupMap() {
     self.delegate = self
     searchCompleter.delegate = self
@@ -60,8 +64,20 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     }
   }
   
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) is not implemented.")
+  func searchCoodinate(_ query: String!) {
+    let searchRequest = MKLocalSearch.Request()
+    searchRequest.naturalLanguageQuery = query
+    let search = MKLocalSearch(request: searchRequest)
+    search.start(completionHandler: {(response, error) in
+      guard let response = response else {
+        // JS側にリジェクト返す
+        return
+      }
+      
+      let coodinate = response.mapItems[0].placemark.coordinate
+      print(coodinate)
+      // JS側でPromise完了させる
+    })
   }
 }
 
@@ -70,6 +86,7 @@ extension MapView {
     let results = completer.results.compactMap { (result) -> [String: String] in
       return ["title": result.title, "subtitle": result.subtitle]
     }
+    
     self.searchLocationResolver?(results)
   }
   

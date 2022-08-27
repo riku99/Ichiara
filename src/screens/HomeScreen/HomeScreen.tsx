@@ -70,6 +70,10 @@ export const HomeScreen = ({ navigation }: Props) => {
     return await mapRef.current?.searchLocation(text);
   };
 
+  const searchCoodinate = async (query: string) => {
+    await mapRef.current?.searchCoodinate(query);
+  };
+
   return (
     <View style={styles.container}>
       <MapView style={styles.mapView} onMapPress={onMapPress} ref={mapRef} />
@@ -85,6 +89,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <BottomSheetContent
           raiseBottomSheet={raiseBottomSheet}
           searchLocation={searchLocation}
+          searchCoodinate={searchCoodinate}
         />
       </BottomSheet>
     </View>

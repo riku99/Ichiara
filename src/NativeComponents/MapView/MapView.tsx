@@ -24,6 +24,10 @@ export class MapView extends React.Component<MapViewProps> {
     return results;
   }
 
+  async searchCoodinate(query: string): Promise<void> {
+    const result = await MapModule.searchCoodinate(query);
+  }
+
   render() {
     return <NativeMap {...this.props} ref={this.ref} />;
   }
