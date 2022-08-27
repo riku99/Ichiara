@@ -17,16 +17,11 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   func setupMap() {
-    self.showsUserLocation = true
-    self.userTrackingMode = MKUserTrackingMode.followWithHeading
-    var region = self.region
-    region.span.latitudeDelta = 0.1
-    region.span.latitudeDelta = 0.1
-    self.setRegion(region, animated: true)
-    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
-    self.addGestureRecognizer(tapGesture)
     self.delegate = self
     searchCompleter.delegate = self
+    self.showsUserLocation = true
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
+    self.addGestureRecognizer(tapGesture)
   }
   
   @objc func mapTapped(_ sender: UITapGestureRecognizer) {
@@ -76,5 +71,9 @@ extension MapView {
       return ["title": result.title, "subtitle": result.subtitle]
     }
     self.searchLocationResolver?(results)
+  }
+  
+  func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+    mapView.userTrackingMode = .followWithHeading
   }
 }

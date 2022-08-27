@@ -36,6 +36,7 @@ export const HomeScreen = ({ navigation }: Props) => {
               '位置情報の使用が許可されていません',
               'アプリを使用するには端末の設定から位置情報をオンにしてください。'
             );
+            break;
         }
       }
     );
