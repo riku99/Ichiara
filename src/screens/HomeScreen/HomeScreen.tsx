@@ -6,7 +6,7 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { Alert, Keyboard, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
@@ -78,7 +78,12 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.mapView} onMapPress={onMapPress} ref={mapRef} />
+      <MapView
+        style={styles.mapView}
+        onMapPress={onMapPress}
+        ref={mapRef}
+        showUserLocationPoint={true}
+      />
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -94,6 +99,20 @@ export const HomeScreen = ({ navigation }: Props) => {
           searchCoodinate={searchCoodinate}
         />
       </BottomSheet>
+
+      <Pressable
+        style={{
+          backgroundColor: 'red',
+          width: 60,
+          height: 60,
+          position: 'absolute',
+          top: 100,
+          alignSelf: 'center',
+        }}
+        onPress={() => {
+          setS((c) => !c);
+        }}
+      />
     </View>
   );
 };

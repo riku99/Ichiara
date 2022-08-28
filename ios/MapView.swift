@@ -6,6 +6,7 @@ import CoreLocation
 class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   
   @objc var onMapPress: RCTBubblingEventBlock?
+  @objc var showUserLocationPoint = false
   
   var searchCompleter = MKLocalSearchCompleter()
   var searchLocationResolver: RCTPromiseResolveBlock?
@@ -20,12 +21,23 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     fatalError("init(coder:) is not implemented.")
   }
   
+  override func didSetProps(_ changedProps: [String]!) {
+    let shouldReconfigure = changedProps.contains("showUserLocationPoint")
+    
+    if shouldReconfigure {
+      configureMap()
+    }
+  }
+  
   func setupMap() {
     self.delegate = self
     searchCompleter.delegate = self
-    self.showsUserLocation = true
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped(_:)))
     self.addGestureRecognizer(tapGesture)
+  }
+  
+  func configureMap() {
+    self.showsUserLocation = showUserLocationPoint
   }
   
   @objc func mapTapped(_ sender: UITapGestureRecognizer) {
@@ -51,7 +63,7 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   func removeAllAnnotations() {
-    // annotateとこのメソッドの組み合わせの問題で、明治的にメインスレッド使わないとエラー出る
+    // annotateとこのメソッドの組み合わせの問題で、明示的にメインスレッド使わないとエラー出る
     DispatchQueue.main.async {
       self.removeAnnotations(self.annotations)
     }
@@ -99,9 +111,5 @@ extension MapView {
     }
     
     self.searchLocationResolver?(results)
-  }
-  
-  func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-    mapView.userTrackingMode = .followWithHeading
   }
 }

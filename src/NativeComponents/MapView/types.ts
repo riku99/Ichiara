@@ -13,6 +13,7 @@ export type MapPressEvent = {
 
 export type MapViewProps = ViewProps & {
   onMapPress?: ({ nativeEvent }: MapPressEvent) => void;
+  showUserLocationPoint?: boolean;
 };
 
 export type SearchLocationResultData = {
