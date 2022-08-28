@@ -70,13 +70,10 @@ export const BottomSheetContent = ({
           <Input
             onChangeText={onChangeSearchInputText}
             onFocus={onSearchInputFocus}
-            inputStyle={styles.inputStyle}
-            inputContainerStyle={styles.inputContainerStyle}
+            inputStyle={styles.input}
+            inputContainerStyle={styles.inputContainer}
             placeholderTextColor={INPUT_PLACEHOLDER_COLOR}
-            containerStyle={{
-              paddingHorizontal: 0,
-              height: 42,
-            }}
+            containerStyle={styles.searchInputContainer}
             placeholder="マップで検索"
             leftIcon={
               <AntDesign
@@ -109,16 +106,21 @@ const SEARCH_INPUT_TEXT_SIZE = 16;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingLeft: 16,
   },
-  inputContainerStyle: {
+  searchInputContainer: {
+    paddingHorizontal: 0,
+    height: 42,
+    paddingRight: 16,
+  },
+  inputContainer: {
     borderBottomWidth: 0,
     backgroundColor: '#e8e8e8',
     borderRadius: 10,
     paddingHorizontal: 8,
     height: 42,
   },
-  inputStyle: {
+  input: {
     fontSize: SEARCH_INPUT_TEXT_SIZE,
   },
   suggestedLocationList: {
