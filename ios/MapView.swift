@@ -7,6 +7,7 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   
   @objc var onMapPress: RCTBubblingEventBlock?
   @objc var showUserLocationPoint = false
+  @objc var customRegion: NSDictionary?
   
   var searchCompleter = MKLocalSearchCompleter()
   var searchLocationResolver: RCTPromiseResolveBlock?
@@ -22,10 +23,14 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   override func didSetProps(_ changedProps: [String]!) {
-    let shouldReconfigure = changedProps.contains("showUserLocationPoint")
+    let shouldReconfigureUserLocationVisible = changedProps.contains("showUserLocationPoint")
+    let shouldReconfigureCustomRegion = changedProps.contains("customRegion")
     
-    if shouldReconfigure {
-      configureMap()
+    if shouldReconfigureUserLocationVisible {
+      configureUserLocationVisible()
+    }
+    if shouldReconfigureCustomRegion {
+      configureCustomRegion()
     }
   }
   
@@ -36,7 +41,25 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     self.addGestureRecognizer(tapGesture)
   }
   
-  func configureMap() {
+  func configureCustomRegion() {
+    if customRegion == nil {
+      return
+    }
+    
+    if let lat = customRegion!["latitude"], let lng = customRegion!["longitude"] {
+      print("✋ region変更")
+      let loc = CLLocationCoordinate2DMake(CLLocationDegrees(lat as! Double), CLLocationDegrees(lng as! Double))
+      var region = self.region
+      if let latDelta = customRegion!["latitudeDelta"], let lngDelta = customRegion!["longitudeDelta"] {
+        region.span.latitudeDelta = latDelta as! Double
+        region.span.longitudeDelta = lngDelta as! Double
+      }
+      region.center = loc
+      self.setRegion(region, animated: true)
+    }
+  }
+  
+  func configureUserLocationVisible() {
     self.showsUserLocation = showUserLocationPoint
   }
   

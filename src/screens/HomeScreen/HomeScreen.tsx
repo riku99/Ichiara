@@ -109,9 +109,6 @@ export const HomeScreen = ({ navigation }: Props) => {
           top: 100,
           alignSelf: 'center',
         }}
-        onPress={() => {
-          setS((c) => !c);
-        }}
       />
     </View>
   );

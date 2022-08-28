@@ -5,6 +5,13 @@ type LatLng = {
   longitude: number;
 };
 
+type Delta = {
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
+
+type Region = LatLng & Delta;
+
 export type MapPressEvent = {
   nativeEvent: LatLng & {
     address?: string;
@@ -14,6 +21,7 @@ export type MapPressEvent = {
 export type MapViewProps = ViewProps & {
   onMapPress?: ({ nativeEvent }: MapPressEvent) => void;
   showUserLocationPoint?: boolean;
+  customRegion?: Region;
 };
 
 export type SearchLocationResultData = {
