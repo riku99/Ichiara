@@ -29,6 +29,10 @@ export class MapView extends React.Component<MapViewProps> {
     return result;
   }
 
+  async annotate(coodinate: { lat: number; lng: number }): Promise<void> {
+    await MapModule.annotate(coodinate);
+  }
+
   render() {
     return <NativeMap {...this.props} ref={this.ref} />;
   }

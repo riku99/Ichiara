@@ -19,6 +19,11 @@ class MapManager: RCTViewManager {
     mapView.searchCoodinate(query, resolve: resolve, rejecter: reject)
   }
   
+  @objc
+  func annotate(_ coodinate: [String: Double]) {
+    mapView.annotate(coodinate)
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }

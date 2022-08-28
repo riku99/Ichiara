@@ -32,11 +32,8 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     if sender.state == .ended {
       let tapPoint = sender.location(in: self)
       let coordinate = self.convert(tapPoint, toCoordinateFrom: self)
-      let annotation = MKPointAnnotation()
-      annotation.coordinate = coordinate
       // 表示されているアノテーションを1つにする
-      self.removeAnnotations(self.annotations)
-      self.addAnnotation(annotation)
+//      self.removeAnnotations(self.annotations)
 
       let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
       CLGeocoder().reverseGeocodeLocation(location, completionHandler: { placemarks, error in
@@ -52,6 +49,15 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
           onPress(eventData)
         }
       })
+    }
+  }
+  
+  func annotate(_ coodinate: [String: Double]) {
+    if let lat = coodinate["lat"], let lng = coodinate["lng"] {
+      let coodinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+      let annotation = MKPointAnnotation()
+      annotation.coordinate = coodinate
+      self.addAnnotation(annotation)
     }
   }
   

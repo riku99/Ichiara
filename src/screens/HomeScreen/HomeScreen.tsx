@@ -53,7 +53,8 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, []);
 
   const onMapPress = async (event: MapPressEvent) => {
-    console.log(event.nativeEvent);
+    const { latitude, longitude } = event.nativeEvent;
+    await mapRef.current?.annotate({ lat: latitude, lng: longitude });
   };
 
   const raiseBottomSheet = () => {
