@@ -5,8 +5,9 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
-import { Alert, Keyboard, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
@@ -17,6 +18,10 @@ export const HomeScreen = ({ navigation }: Props) => {
   const mapRef = useRef<MapView>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['12', '25%', '90%'], []);
+  const [
+    initialLocation,
+    setInitialLocation,
+  ] = useState<null | Location.Location>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,12 +29,21 @@ export const HomeScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const getCurrentLocation = async () => {
+    const location = await Location.getCurrentLocation();
+    setInitialLocation(location);
+  };
+
   useEffect(() => {
     const subscription = Location.authorizationChangedListener(
       async (event) => {
         switch (event.status) {
           case 'authorizedWhenInUse':
             await Location.requestAlwaysAuthorization();
+            await getCurrentLocation();
+            break;
+          case 'authorizedAlways':
+            await getCurrentLocation();
             break;
           case 'denied':
             Alert.alert(
@@ -83,6 +97,13 @@ export const HomeScreen = ({ navigation }: Props) => {
         onMapPress={onMapPress}
         ref={mapRef}
         showUserLocationPoint={true}
+        customRegion={
+          initialLocation && {
+            ...initialLocation,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }
+        }
       />
 
       <BottomSheet
@@ -99,17 +120,6 @@ export const HomeScreen = ({ navigation }: Props) => {
           searchCoodinate={searchCoodinate}
         />
       </BottomSheet>
-
-      <Pressable
-        style={{
-          backgroundColor: 'red',
-          width: 60,
-          height: 60,
-          position: 'absolute',
-          top: 100,
-          alignSelf: 'center',
-        }}
-      />
     </View>
   );
 };

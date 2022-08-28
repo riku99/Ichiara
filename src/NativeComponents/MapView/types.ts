@@ -6,8 +6,8 @@ type LatLng = {
 };
 
 type Delta = {
-  latitudeDelta: number;
-  longitudeDelta: number;
+  latitudeDelta?: number;
+  longitudeDelta?: number;
 };
 
 type Region = LatLng & Delta;

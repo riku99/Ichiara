@@ -47,7 +47,6 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     }
     
     if let lat = customRegion!["latitude"], let lng = customRegion!["longitude"] {
-      print("✋ region変更")
       let loc = CLLocationCoordinate2DMake(CLLocationDegrees(lat as! Double), CLLocationDegrees(lng as! Double))
       var region = self.region
       if let latDelta = customRegion!["latitudeDelta"], let lngDelta = customRegion!["longitudeDelta"] {

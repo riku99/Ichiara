@@ -29,6 +29,17 @@ class LocationManager: RCTEventEmitter {
   }
   
   @objc
+  func getCurrentLocation(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    let coodinate = locationManager.location?.coordinate
+    if coodinate != nil {
+      let data = ["latitude": coodinate!.latitude, "longitude": coodinate!.longitude]
+      resolve(data)
+    } else {
+      reject("noLocation", "位置情報を取得できませんでした。", nil)
+    }
+  }
+  
+  @objc
   override func supportedEvents() -> [String]! {
     return ["onAuthorizationStatusDidChange"]
   }

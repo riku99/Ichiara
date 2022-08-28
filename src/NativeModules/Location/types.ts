@@ -8,3 +8,8 @@ export type LocationAuthorizationStatus =
 export type AuthorizationChangedEvent = {
   status: LocationAuthorizationStatus;
 };
+
+export type Location = {
+  latitude: number;
+  longitude: number;
+};

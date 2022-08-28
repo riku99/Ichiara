@@ -3,7 +3,7 @@ import {
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
-import { AuthorizationChangedEvent } from './types';
+import { AuthorizationChangedEvent, Location } from './types';
 
 const { LocationManager } = NativeModules;
 
@@ -30,4 +30,8 @@ export const authorizationChangedListener = (
   );
 
   return emitterSubsctiption;
+};
+
+export const getCurrentLocation = async (): Promise<Location> => {
+  return await LocationManager.getCurrentLocation();
 };
