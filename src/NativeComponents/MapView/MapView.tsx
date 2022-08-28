@@ -33,6 +33,10 @@ export class MapView extends React.Component<MapViewProps> {
     await MapModule.annotate(coodinate);
   }
 
+  async removeAllAnnotations(): Promise<void> {
+    await MapModule.removeAllAnnotations();
+  }
+
   render() {
     return <NativeMap {...this.props} ref={this.ref} />;
   }

@@ -40,7 +40,6 @@ export const BottomSheetContent = ({
 
   const onChangeSearchInputText = async (text: string) => {
     const result = await searchLocation(text);
-    console.log(result);
     setSuggestedLocation(result);
   };
 

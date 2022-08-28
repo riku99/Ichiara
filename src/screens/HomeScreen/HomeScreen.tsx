@@ -54,6 +54,7 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent;
+    await mapRef.current?.removeAllAnnotations();
     await mapRef.current?.annotate({ lat: latitude, lng: longitude });
   };
 

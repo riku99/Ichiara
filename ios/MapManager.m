@@ -10,4 +10,6 @@ RCT_EXTERN_METHOD(searchLocation:(NSString *)text resolve:(RCTPromiseResolveBloc
 RCT_EXTERN_METHOD(searchCoodinate:(NSString *)query resolve:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 
 RCT_EXTERN_METHOD(annotate:(NSDictionary *)coodinate)
+
+RCT_EXTERN_METHOD(removeAllAnnotations)
 @end

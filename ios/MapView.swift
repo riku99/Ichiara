@@ -32,8 +32,6 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     if sender.state == .ended {
       let tapPoint = sender.location(in: self)
       let coordinate = self.convert(tapPoint, toCoordinateFrom: self)
-      // 表示されているアノテーションを1つにする
-//      self.removeAnnotations(self.annotations)
 
       let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
       CLGeocoder().reverseGeocodeLocation(location, completionHandler: { placemarks, error in
@@ -49,6 +47,13 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
           onPress(eventData)
         }
       })
+    }
+  }
+  
+  func removeAllAnnotations() {
+    // annotateとこのメソッドの組み合わせの問題で、明治的にメインスレッド使わないとエラー出る
+    DispatchQueue.main.async {
+      self.removeAnnotations(self.annotations)
     }
   }
   

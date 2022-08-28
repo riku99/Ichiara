@@ -24,6 +24,11 @@ class MapManager: RCTViewManager {
     mapView.annotate(coodinate)
   }
   
+  @objc
+  func removeAllAnnotations() {
+    mapView.removeAllAnnotations()
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
