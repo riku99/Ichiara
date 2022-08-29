@@ -11,17 +11,24 @@ import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
+import { LocationBottomSheetContent } from './LocationBottomSheetConent';
+import { SelectedLocation } from './type';
 
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
 export const HomeScreen = ({ navigation }: Props) => {
   const mapRef = useRef<MapView>(null);
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const searchBottomSheetRef = useRef<BottomSheet>(null);
+  const locationBottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['12', '25%', '90%'], []);
   const [
     initialLocation,
     setInitialLocation,
   ] = useState<null | Location.Location>(null);
+  const [
+    selectedLocation,
+    setSelectedLocation,
+  ] = useState<null | SelectedLocation>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -67,13 +74,20 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, []);
 
   const onMapPress = async (event: MapPressEvent) => {
-    const { latitude, longitude } = event.nativeEvent;
-    await mapRef.current?.removeAllAnnotations();
-    await mapRef.current?.annotate({ lat: latitude, lng: longitude });
+    const { latitude, longitude, address } = event.nativeEvent;
+    Promise.all([
+      mapRef.current?.removeAllAnnotations(),
+      mapRef.current?.annotate({ lat: latitude, lng: longitude }),
+    ]);
+    setSelectedLocation({
+      lat: latitude,
+      lng: longitude,
+      title: address,
+    });
   };
 
   const raiseBottomSheet = () => {
-    bottomSheetRef.current?.snapToIndex(2);
+    searchBottomSheetRef.current?.snapToIndex(2);
   };
 
   const handleSheetChanges = useCallback((index: number) => {
@@ -89,6 +103,14 @@ export const HomeScreen = ({ navigation }: Props) => {
   const searchCoodinate = async (query: string) => {
     return await mapRef.current?.searchCoodinate(query);
   };
+
+  useEffect(() => {
+    if (selectedLocation) {
+      searchBottomSheetRef.current?.snapToIndex(1);
+    }
+  }, [selectedLocation]);
+
+  console.log(selectedLocation);
 
   return (
     <View style={styles.container}>
@@ -106,20 +128,37 @@ export const HomeScreen = ({ navigation }: Props) => {
         }
       />
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={snapPoints}
-        backgroundStyle={styles.bottomSheetBackground}
-        handleIndicatorStyle={styles.bottomSheetHandleIndicator}
-        onChange={handleSheetChanges}
-      >
-        <BottomSheetContent
-          raiseBottomSheet={raiseBottomSheet}
-          searchLocation={searchLocation}
-          searchCoodinate={searchCoodinate}
-        />
-      </BottomSheet>
+      {!selectedLocation && (
+        <BottomSheet
+          ref={searchBottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          backgroundStyle={styles.bottomSheetBackground}
+          handleIndicatorStyle={styles.bottomSheetHandleIndicator}
+          onChange={handleSheetChanges}
+        >
+          <BottomSheetContent
+            raiseBottomSheet={raiseBottomSheet}
+            searchLocation={searchLocation}
+            searchCoodinate={searchCoodinate}
+          />
+        </BottomSheet>
+      )}
+
+      {selectedLocation && (
+        <BottomSheet
+          ref={locationBottomSheetRef}
+          index={1}
+          snapPoints={snapPoints}
+          backgroundStyle={styles.bottomSheetBackground}
+          handleIndicatorStyle={styles.bottomSheetHandleIndicator}
+        >
+          <LocationBottomSheetContent
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+          />
+        </BottomSheet>
+      )}
     </View>
   );
 };
