@@ -73,6 +73,12 @@ export const HomeScreen = ({ navigation }: Props) => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!selectedLocation) {
+      locationBottomSheetRef.current?.close();
+    }
+  }, [selectedLocation]);
+
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;
     Promise.all([
@@ -103,14 +109,6 @@ export const HomeScreen = ({ navigation }: Props) => {
   const searchCoodinate = async (query: string) => {
     return await mapRef.current?.searchCoodinate(query);
   };
-
-  useEffect(() => {
-    if (selectedLocation) {
-      searchBottomSheetRef.current?.snapToIndex(1);
-    }
-  }, [selectedLocation]);
-
-  console.log(selectedLocation);
 
   return (
     <View style={styles.container}>
@@ -145,20 +143,18 @@ export const HomeScreen = ({ navigation }: Props) => {
         </BottomSheet>
       )}
 
-      {selectedLocation && (
-        <BottomSheet
-          ref={locationBottomSheetRef}
-          index={1}
-          snapPoints={snapPoints}
-          backgroundStyle={styles.bottomSheetBackground}
-          handleIndicatorStyle={styles.bottomSheetHandleIndicator}
-        >
-          <LocationBottomSheetContent
-            selectedLocation={selectedLocation}
-            setSelectedLocation={setSelectedLocation}
-          />
-        </BottomSheet>
-      )}
+      <BottomSheet
+        ref={locationBottomSheetRef}
+        index={!selectedLocation ? -1 : 1}
+        snapPoints={snapPoints}
+        backgroundStyle={styles.bottomSheetBackground}
+        handleIndicatorStyle={styles.bottomSheetHandleIndicator}
+      >
+        <LocationBottomSheetContent
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+        />
+      </BottomSheet>
     </View>
   );
 };

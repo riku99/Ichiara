@@ -92,11 +92,13 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   func annotate(_ coodinate: [String: Double]) {
-    if let lat = coodinate["lat"], let lng = coodinate["lng"] {
-      let coodinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-      let annotation = MKPointAnnotation()
-      annotation.coordinate = coodinate
-      self.addAnnotation(annotation)
+    DispatchQueue.main.async {
+      if let lat = coodinate["lat"], let lng = coodinate["lng"] {
+        let coodinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coodinate
+        self.addAnnotation(annotation)
+      }
     }
   }
   

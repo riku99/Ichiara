@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { SelectedLocation } from './type';
 
 type Props = {
-  selectedLocation: SelectedLocation;
+  selectedLocation: SelectedLocation | null;
   setSelectedLocation: (l: SelectedLocation) => void;
 };
 
@@ -15,6 +15,10 @@ export const LocationBottomSheetContent = ({
   const onClosePress = () => {
     setSelectedLocation(null);
   };
+  if (!selectedLocation) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
