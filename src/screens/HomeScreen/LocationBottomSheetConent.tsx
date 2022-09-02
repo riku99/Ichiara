@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Text } from '@rneui/themed';
-import React from 'react';
+import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/NativeComponents/MapView';
 import { SelectedLocation } from './type';
@@ -20,6 +20,8 @@ export const LocationBottomSheetContent = ({
   radius,
   setRadius,
 }: Props) => {
+  const [vibration, setVibration] = useState(true);
+
   const onClosePress = () => {
     setSelectedLocation(null);
   };
@@ -132,7 +134,13 @@ export const LocationBottomSheetContent = ({
 
           <View>
             <Text style={styles.itemLabel}>バイブレーション</Text>
-            <Switch style={[styles.item]} value={true} />
+            <Switch
+              style={[styles.item]}
+              value={vibration}
+              onValueChange={(v) => {
+                setVibration(v);
+              }}
+            />
           </View>
         </View>
       </View>
