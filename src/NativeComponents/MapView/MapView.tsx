@@ -4,7 +4,11 @@ import {
   NativeModules,
   requireNativeComponent,
 } from 'react-native';
-import { MapViewProps, SearchLocationResult } from './types';
+import {
+  MapViewProps,
+  SearchCoodinateResult,
+  SearchLocationResult,
+} from './types';
 
 const NativeMap = requireNativeComponent<MapViewProps>('Map');
 const MapModule = NativeModules.MapManager;
@@ -24,7 +28,7 @@ export class MapView extends React.Component<MapViewProps> {
     return results;
   }
 
-  async searchCoodinate(query: string): Promise<void> {
+  async searchCoodinate(query: string): Promise<SearchCoodinateResult> {
     const result = await MapModule.searchCoodinate(query);
     return result;
   }

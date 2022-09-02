@@ -30,3 +30,5 @@ export type SearchLocationResultData = {
 };
 
 export type SearchLocationResult = SearchLocationResultData[];
+
+export type SearchCoodinateResult = LatLng;

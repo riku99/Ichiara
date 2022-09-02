@@ -122,7 +122,7 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
       }
       
       let coodinate = response.mapItems[0].placemark.coordinate
-      let data = ["lat": coodinate.latitude, "lng": coodinate.longitude]
+      let data = ["latitude": coodinate.latitude, "longitude": coodinate.longitude]
       resolve(data)
     })
   }

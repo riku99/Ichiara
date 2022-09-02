@@ -1,20 +1,26 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Text } from '@rneui/themed';
+import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { MapView } from 'src/NativeComponents/MapView';
 import { SelectedLocation } from './type';
 
 type Props = {
   selectedLocation: SelectedLocation | null;
   setSelectedLocation: (l: SelectedLocation) => void;
+  mapRef: React.RefObject<MapView>;
 };
 
 export const LocationBottomSheetContent = ({
   selectedLocation,
   setSelectedLocation,
+  mapRef,
 }: Props) => {
   const onClosePress = () => {
     setSelectedLocation(null);
+    mapRef.current?.removeAllAnnotations();
   };
+
   if (!selectedLocation) {
     return null;
   }

@@ -137,8 +137,8 @@ export const HomeScreen = ({ navigation }: Props) => {
         >
           <BottomSheetContent
             raiseBottomSheet={raiseBottomSheet}
-            searchLocation={searchLocation}
-            searchCoodinate={searchCoodinate}
+            mapRef={mapRef}
+            setSelectedLocation={setSelectedLocation}
           />
         </BottomSheet>
       )}
@@ -153,6 +153,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <LocationBottomSheetContent
           selectedLocation={selectedLocation}
           setSelectedLocation={setSelectedLocation}
+          mapRef={mapRef}
         />
       </BottomSheet>
     </View>

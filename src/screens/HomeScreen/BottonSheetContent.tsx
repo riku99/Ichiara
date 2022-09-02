@@ -10,20 +10,22 @@ import {
   View,
 } from 'react-native';
 import {
+  MapView,
   SearchLocationResult,
   SearchLocationResultData,
 } from 'src/NativeComponents/MapView';
+import { SelectedLocation } from './type';
 
 type Props = {
   raiseBottomSheet: () => void;
-  searchLocation: (text: string) => Promise<SearchLocationResult>;
-  searchCoodinate: (query: string) => Promise<void>;
+  setSelectedLocation: (l: SelectedLocation) => void;
+  mapRef: React.MutableRefObject<MapView>;
 };
 
 export const BottomSheetContent = ({
   raiseBottomSheet,
-  searchLocation,
-  searchCoodinate,
+  setSelectedLocation,
+  mapRef,
 }: Props) => {
   const [
     suggestedLocation,
@@ -39,7 +41,7 @@ export const BottomSheetContent = ({
   };
 
   const onChangeSearchInputText = async (text: string) => {
-    const result = await searchLocation(text);
+    const result = await mapRef.current?.searchLocation(text);
     setSuggestedLocation(result);
   };
 
@@ -50,7 +52,12 @@ export const BottomSheetContent = ({
       }
 
       const onItemPress = async () => {
-        const result = await searchCoodinate(item.subtitle);
+        const result = await mapRef.current?.searchCoodinate(item.subtitle);
+        setSelectedLocation({
+          title: item.title,
+          lat: result.latitude,
+          lng: result.longitude,
+        });
       };
 
       return (
