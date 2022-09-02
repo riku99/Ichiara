@@ -86,25 +86,30 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     if (selectedLocation) {
       (async () => {
-        await mapRef.current?.removeCurrentCircle(),
-          Promise.all([
-            mapRef.current?.showCircle({
-              lat: selectedLocation.lat,
-              lng: selectedLocation.lng,
-              radius: 500,
-            }),
-            mapRef.current?.annotate({
-              lat: selectedLocation.lat,
-              lng: selectedLocation.lng,
-            }),
-          ]);
-        setRegion({
-          latitude: selectedLocation.lat,
-          longitude: selectedLocation.lng,
-        });
+        await mapRef.current?.annotate({
+          lat: selectedLocation.lat,
+          lng: selectedLocation.lng,
+        }),
+          setRegion({
+            latitude: selectedLocation.lat,
+            longitude: selectedLocation.lng,
+          });
       })();
     }
   }, [selectedLocation]);
+
+  useEffect(() => {
+    if (selectedLocation && radius) {
+      (async () => {
+        await mapRef.current?.removeCurrentCircle(),
+          mapRef.current?.showCircle({
+            lat: selectedLocation.lat,
+            lng: selectedLocation.lng,
+            radius: radius,
+          });
+      })();
+    }
+  }, [selectedLocation, radius]);
 
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;
