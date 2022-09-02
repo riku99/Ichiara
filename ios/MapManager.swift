@@ -34,6 +34,11 @@ class MapManager: RCTViewManager {
     mapView.showCircle(config)
   }
   
+  @objc
+  func removeCurrentCircle() {
+    mapView.removeCurrentCircle()
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }

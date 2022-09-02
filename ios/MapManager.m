@@ -12,4 +12,5 @@ RCT_EXTERN_METHOD(searchCoodinate:(NSString *)query resolve:(RCTPromiseResolveBl
 RCT_EXTERN_METHOD(annotate:(NSDictionary *)coodinate)
 RCT_EXTERN_METHOD(removeAllAnnotations)
 RCT_EXTERN_METHOD(showCircle:(NSDictionary *)showCircle)
+RCT_EXTERN_METHOD(removeCurrentCircle)
 @end

@@ -142,6 +142,12 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
     }
   }
   
+  func removeCurrentCircle() {
+    if let circle = self.mapCircle {
+      self.removeOverlay(circle)
+    }
+  }
+  
   func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
     let circle = MKCircleRenderer(overlay: overlay)
     circle.strokeColor = .blue

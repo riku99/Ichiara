@@ -81,11 +81,14 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (selectedLocation) {
-      mapRef.current?.showCircle({
-        lat: selectedLocation.lat,
-        lng: selectedLocation.lng,
-        radius: 500,
-      });
+      Promise.all([
+        mapRef.current?.showCircle({
+          lat: selectedLocation.lat,
+          lng: selectedLocation.lng,
+          radius: 500,
+        }),
+        mapRef.current?.removeCurrentCircle(),
+      ]);
     }
   }, [selectedLocation]);
 
