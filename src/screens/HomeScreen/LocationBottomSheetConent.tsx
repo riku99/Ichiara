@@ -9,11 +9,15 @@ type Props = {
   selectedLocation: SelectedLocation | null;
   setSelectedLocation: (l: SelectedLocation) => void;
   mapRef: React.RefObject<MapView>;
+  radius: number;
+  setRadius: (n: number) => void;
 };
 
 export const LocationBottomSheetContent = ({
   selectedLocation,
   setSelectedLocation,
+  radius,
+  setRadius,
 }: Props) => {
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -37,7 +41,7 @@ export const LocationBottomSheetContent = ({
           <View>
             <Text style={styles.itemLabel}>距離</Text>
             <Pressable>
-              <Text style={[styles.radius, styles.item]}>500m</Text>
+              <Text style={[styles.radius, styles.item]}>{`${radius}m`}</Text>
             </Pressable>
           </View>
 

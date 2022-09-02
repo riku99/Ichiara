@@ -26,6 +26,7 @@ export const HomeScreen = ({ navigation }: Props) => {
     selectedLocation,
     setSelectedLocation,
   ] = useState<null | SelectedLocation>(null);
+  const [radius, setRadius] = useState(500);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -172,6 +173,8 @@ export const HomeScreen = ({ navigation }: Props) => {
           selectedLocation={selectedLocation}
           setSelectedLocation={setSelectedLocation}
           mapRef={mapRef}
+          radius={radius}
+          setRadius={setRadius}
         />
       </BottomSheet>
     </View>
