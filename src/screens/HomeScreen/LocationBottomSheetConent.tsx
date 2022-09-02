@@ -3,7 +3,7 @@ import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Button, Text } from '@rneui/themed';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
-import { MapView } from 'src/NativeComponents/MapView';
+import { MapView } from 'src/nativeComponents/MapView';
 import { SelectedLocation } from './type';
 
 type Props = {
@@ -118,6 +118,7 @@ export const LocationBottomSheetContent = ({
 
       <View style={styles.content}>
         <View style={styles.content1}>
+          {/* @ts-ignore https://github.com/react-native-menu/menu/pull/416  */}
           <MenuView
             actions={radiusMenuActions}
             onPressAction={({ nativeEvent }) => {

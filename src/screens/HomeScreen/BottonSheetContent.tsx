@@ -13,7 +13,7 @@ import {
   MapView,
   SearchLocationResult,
   SearchLocationResultData,
-} from 'src/NativeComponents/MapView';
+} from 'src/nativeComponents/MapView';
 import { SelectedLocation } from './type';
 
 type Props = {

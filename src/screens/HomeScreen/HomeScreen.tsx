@@ -8,8 +8,8 @@ import {
   useState,
 } from 'react';
 import { Alert, Keyboard, StyleSheet, View } from 'react-native';
-import { MapPressEvent, MapView, Region } from 'src/NativeComponents/MapView';
-import * as Location from 'src/NativeModules/Location';
+import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
+import * as Location from 'src/nativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
 import { LocationBottomSheetContent } from './LocationBottomSheetConent';
 import { SelectedLocation } from './type';
