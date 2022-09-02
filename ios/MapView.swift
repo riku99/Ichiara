@@ -126,6 +126,25 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
       resolve(data)
     })
   }
+  
+  func showCircle(_ config: [String: Double]) {
+    DispatchQueue.main.async {
+      if let lat = config["lat"], let lng = config["lng"], let r = config["radius"] {
+        let coodinate = CLLocationCoordinate2DMake(lat, lng)
+        let radius = CLLocationDistance(r)
+        let circle = MKCircle(center: coodinate, radius: radius)
+        self.addOverlay(circle)
+      }
+    }
+  }
+  
+  func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    let circle = MKCircleRenderer(overlay: overlay)
+    circle.strokeColor = .blue
+    circle.fillColor = UIColor(red: 0, green: 0, blue: 0.5, alpha: 0.1)
+    circle.lineWidth = 1.0
+    return circle
+  }
 }
 
 extension MapView {

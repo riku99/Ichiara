@@ -20,7 +20,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const mapRef = useRef<MapView>(null);
   const searchBottomSheetRef = useRef<BottomSheet>(null);
   const locationBottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['12', '25%', '90%'], []);
+  const snapPoints = useMemo(() => ['12%', '25%', '90%'], []);
   const [
     initialLocation,
     setInitialLocation,
@@ -79,6 +79,16 @@ export const HomeScreen = ({ navigation }: Props) => {
     }
   }, [selectedLocation]);
 
+  useEffect(() => {
+    if (selectedLocation) {
+      mapRef.current?.showCircle({
+        lat: selectedLocation.lat,
+        lng: selectedLocation.lng,
+        radius: 500,
+      });
+    }
+  }, [selectedLocation]);
+
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;
     Promise.all([
@@ -101,14 +111,6 @@ export const HomeScreen = ({ navigation }: Props) => {
       Keyboard.dismiss();
     }
   }, []);
-
-  const searchLocation = async (text: string) => {
-    return await mapRef.current?.searchLocation(text);
-  };
-
-  const searchCoodinate = async (query: string) => {
-    return await mapRef.current?.searchCoodinate(query);
-  };
 
   return (
     <View style={styles.container}>

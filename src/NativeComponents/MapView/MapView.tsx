@@ -41,6 +41,14 @@ export class MapView extends React.Component<MapViewProps> {
     await MapModule.removeAllAnnotations();
   }
 
+  async showCircle(config: {
+    lat: number;
+    lng: number;
+    radius: number;
+  }): Promise<void> {
+    await MapModule.showCircle(config);
+  }
+
   render() {
     return <NativeMap {...this.props} ref={this.ref} />;
   }

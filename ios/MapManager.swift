@@ -29,6 +29,11 @@ class MapManager: RCTViewManager {
     mapView.removeAllAnnotations()
   }
   
+  @objc
+  func showCircle(_ config: [String: Double]) {
+    mapView.showCircle(config)
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
