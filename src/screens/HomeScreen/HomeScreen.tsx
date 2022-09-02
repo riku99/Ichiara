@@ -76,6 +76,10 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     if (!selectedLocation) {
       locationBottomSheetRef.current?.close();
+      Promise.all([
+        mapRef.current?.removeCurrentCircle(),
+        mapRef.current?.removeAllAnnotations(),
+      ]);
     }
   }, [selectedLocation]);
 

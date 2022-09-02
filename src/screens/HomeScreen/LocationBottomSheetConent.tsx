@@ -1,7 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/NativeComponents/MapView';
 import { SelectedLocation } from './type';
 
@@ -14,11 +14,9 @@ type Props = {
 export const LocationBottomSheetContent = ({
   selectedLocation,
   setSelectedLocation,
-  mapRef,
 }: Props) => {
   const onClosePress = () => {
     setSelectedLocation(null);
-    mapRef.current?.removeAllAnnotations();
   };
 
   if (!selectedLocation) {
@@ -32,6 +30,22 @@ export const LocationBottomSheetContent = ({
         <Pressable style={styles.closeButton} onPress={onClosePress}>
           <AntDesign name="close" size={20} color="black" />
         </Pressable>
+      </View>
+
+      <View style={styles.content}>
+        <View style={styles.content1}>
+          <View>
+            <Text style={styles.itemLabel}>距離</Text>
+            <Pressable>
+              <Text style={[styles.radius, styles.item]}>500m</Text>
+            </Pressable>
+          </View>
+
+          <View>
+            <Text style={styles.itemLabel}>バイブレーション</Text>
+            <Switch style={[styles.item]} value={true} />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -58,5 +72,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#ced3db',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  content: {
+    paddingHorizontal: 16,
+    marginTop: 24,
+  },
+  content1: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  itemLabel: {
+    fontWeight: 'bold',
+    color: 'gray',
+    fontSize: 16,
+  },
+  item: {
+    marginTop: 4,
+  },
+  radius: {
+    fontSize: 22,
+    fontWeight: 'bold',
   },
 });
