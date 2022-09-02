@@ -13,6 +13,8 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   var searchLocationResolver: RCTPromiseResolveBlock?
   var searchLocationRjecter: RCTPromiseRejectBlock?
   
+  var mapCircle: MKCircle?
+  
   override public init (frame: CGRect) {
     super.init(frame: frame)
     setupMap()
@@ -132,8 +134,10 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
       if let lat = config["lat"], let lng = config["lng"], let r = config["radius"] {
         let coodinate = CLLocationCoordinate2DMake(lat, lng)
         let radius = CLLocationDistance(r)
-        let circle = MKCircle(center: coodinate, radius: radius)
-        self.addOverlay(circle)
+        self.mapCircle = MKCircle(center: coodinate, radius: radius)
+        if let circle = self.mapCircle {
+          self.addOverlay(circle)
+        }
       }
     }
   }
