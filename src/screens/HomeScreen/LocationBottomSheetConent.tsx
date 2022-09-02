@@ -1,7 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
+import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Text } from '@rneui/themed';
 import React from 'react';
-import { Pressable, StyleSheet, Switch, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/NativeComponents/MapView';
 import { SelectedLocation } from './type';
 
@@ -23,6 +24,83 @@ export const LocationBottomSheetContent = ({
     setSelectedLocation(null);
   };
 
+  const radiusMenuActions: MenuAction[] = [
+    {
+      id: 'custom',
+      title: 'カスタム',
+    },
+    {
+      id: '2000',
+      title: '2km',
+    },
+    {
+      id: '1000',
+      title: '1km',
+    },
+    {
+      id: '500',
+      title: '500m',
+    },
+    {
+      id: '300',
+      title: '300m',
+    },
+  ];
+
+  const onRadiusMenuActionPress = (id: string) => {
+    switch (id) {
+      case '300':
+        setRadius(300);
+        break;
+      case '500':
+        setRadius(500);
+        break;
+      case '1000':
+        setRadius(1000);
+        break;
+      case '2000':
+        setRadius(2000);
+        break;
+      case 'custom':
+        Alert.prompt(
+          'お知らせする範囲をメートルで入力してください',
+          '',
+          [
+            {
+              text: 'キャンセル',
+              style: 'cancel',
+            },
+            {
+              text: '設定',
+              onPress: (input) => {
+                const r = Number(input);
+                if (r) {
+                  if (r < 300 || r > 3000) {
+                    Alert.alert('設定できる範囲は300m以上3km以下です');
+                    return;
+                  }
+                  setRadius(r);
+                } else {
+                  Alert.alert('入力値が不正です');
+                }
+              },
+            },
+          ],
+          'plain-text',
+          '',
+          'number-pad'
+        );
+    }
+  };
+
+  const formatRadius = (r: number) => {
+    if (r < 1000) {
+      return `${r}m`;
+    } else {
+      return `${r / 1000}km`;
+    }
+  };
+
   if (!selectedLocation) {
     return null;
   }
@@ -38,12 +116,19 @@ export const LocationBottomSheetContent = ({
 
       <View style={styles.content}>
         <View style={styles.content1}>
-          <View>
-            <Text style={styles.itemLabel}>距離</Text>
+          <MenuView
+            actions={radiusMenuActions}
+            onPressAction={({ nativeEvent }) => {
+              onRadiusMenuActionPress(nativeEvent.event);
+            }}
+          >
             <Pressable>
-              <Text style={[styles.radius, styles.item]}>{`${radius}m`}</Text>
+              <Text style={styles.itemLabel}>お知らせする範囲</Text>
+              <Text style={[styles.radius, styles.item]}>
+                {formatRadius(radius)}
+              </Text>
             </Pressable>
-          </View>
+          </MenuView>
 
           <View>
             <Text style={styles.itemLabel}>バイブレーション</Text>
