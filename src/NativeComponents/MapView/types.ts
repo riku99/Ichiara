@@ -10,7 +10,7 @@ type Delta = {
   longitudeDelta?: number;
 };
 
-type Region = LatLng & Delta;
+export type Region = LatLng & Delta;
 
 export type MapPressEvent = {
   nativeEvent: LatLng & {

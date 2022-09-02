@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { Alert, Keyboard, StyleSheet, View } from 'react-native';
-import { MapPressEvent, MapView } from 'src/NativeComponents/MapView';
+import { MapPressEvent, MapView, Region } from 'src/NativeComponents/MapView';
 import * as Location from 'src/NativeModules/Location';
 import { BottomSheetContent } from './BottonSheetContent';
 import { LocationBottomSheetContent } from './LocationBottomSheetConent';
@@ -21,10 +21,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const searchBottomSheetRef = useRef<BottomSheet>(null);
   const locationBottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['12%', '25%', '90%'], []);
-  const [
-    initialLocation,
-    setInitialLocation,
-  ] = useState<null | Location.Location>(null);
+  const [region, setRegion] = useState<null | Region>(null);
   const [
     selectedLocation,
     setSelectedLocation,
@@ -38,7 +35,7 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   const getCurrentLocation = async () => {
     const location = await Location.getCurrentLocation();
-    setInitialLocation(location);
+    setRegion(location);
   };
 
   useEffect(() => {
@@ -75,24 +72,36 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     if (!selectedLocation) {
-      locationBottomSheetRef.current?.close();
-      Promise.all([
-        mapRef.current?.removeCurrentCircle(),
-        mapRef.current?.removeAllAnnotations(),
-      ]);
+      (async () => {
+        locationBottomSheetRef.current?.close();
+        await Promise.all([
+          mapRef.current?.removeCurrentCircle(),
+          mapRef.current?.removeAllAnnotations(),
+        ]);
+      })();
     }
   }, [selectedLocation]);
 
   useEffect(() => {
     if (selectedLocation) {
-      Promise.all([
-        mapRef.current?.showCircle({
-          lat: selectedLocation.lat,
-          lng: selectedLocation.lng,
-          radius: 500,
-        }),
-        mapRef.current?.removeCurrentCircle(),
-      ]);
+      (async () => {
+        await mapRef.current?.removeCurrentCircle(),
+          Promise.all([
+            mapRef.current?.showCircle({
+              lat: selectedLocation.lat,
+              lng: selectedLocation.lng,
+              radius: 500,
+            }),
+            mapRef.current?.annotate({
+              lat: selectedLocation.lat,
+              lng: selectedLocation.lng,
+            }),
+          ]);
+        setRegion({
+          latitude: selectedLocation.lat,
+          longitude: selectedLocation.lng,
+        });
+      })();
     }
   }, [selectedLocation]);
 
@@ -127,10 +136,10 @@ export const HomeScreen = ({ navigation }: Props) => {
         ref={mapRef}
         showUserLocationPoint={true}
         customRegion={
-          initialLocation && {
-            ...initialLocation,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
+          region && {
+            ...region,
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03,
           }
         }
       />
