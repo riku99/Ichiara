@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { MenuAction, MenuView } from '@react-native-menu/menu';
-import { Text } from '@rneui/themed';
+import { Button, Text } from '@rneui/themed';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/NativeComponents/MapView';
@@ -140,9 +140,19 @@ export const LocationBottomSheetContent = ({
               onValueChange={(v) => {
                 setVibration(v);
               }}
+              trackColor={{
+                true: '#5294ff',
+              }}
             />
           </View>
         </View>
+
+        <Button
+          containerStyle={styles.registrationButtonContainer}
+          title="登録する"
+          titleStyle={styles.registrationButtonTitle}
+          buttonStyle={styles.registrationButton}
+        />
       </View>
     </View>
   );
@@ -189,5 +199,16 @@ const styles = StyleSheet.create({
   radius: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  registrationButtonContainer: {
+    marginTop: 90,
+  },
+  registrationButtonTitle: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  registrationButton: {
+    height: 46,
+    backgroundColor: '#5294ff',
   },
 });
