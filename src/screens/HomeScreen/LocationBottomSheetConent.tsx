@@ -5,7 +5,7 @@ import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/nativeComponents/MapView';
-import { helloAtom, locationsAtom } from 'src/stores';
+import { locationsAtom } from 'src/stores';
 import { SelectedLocation } from './type';
 
 type Props = {
@@ -23,7 +23,6 @@ export const LocationBottomSheetContent = ({
   setRadius,
 }: Props) => {
   const [vibration, setVibration] = useState(true);
-  const [, setHello] = useAtom(helloAtom);
   const [, setLocations] = useAtom(locationsAtom);
 
   const onClosePress = () => {
@@ -109,12 +108,13 @@ export const LocationBottomSheetContent = ({
 
   const onReistrationButtonPress = () => {
     setLocations((c) => {
-      c.unshift({
+      const newData = {
         ...selectedLocation,
         radius,
         vibration,
-      });
-      return c;
+      };
+      const newLocations = [newData, ...c];
+      return newLocations;
     });
   };
 
