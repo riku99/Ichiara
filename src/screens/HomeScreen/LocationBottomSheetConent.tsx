@@ -1,9 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
 import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Button, Text } from '@rneui/themed';
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/nativeComponents/MapView';
+import { helloAtom, locationsAtom } from 'src/stores';
 import { SelectedLocation } from './type';
 
 type Props = {
@@ -21,6 +23,8 @@ export const LocationBottomSheetContent = ({
   setRadius,
 }: Props) => {
   const [vibration, setVibration] = useState(true);
+  const [, setHello] = useAtom(helloAtom);
+  const [, setLocations] = useAtom(locationsAtom);
 
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -103,6 +107,17 @@ export const LocationBottomSheetContent = ({
     }
   };
 
+  const onReistrationButtonPress = () => {
+    setLocations((c) => {
+      c.unshift({
+        ...selectedLocation,
+        radius,
+        vibration,
+      });
+      return c;
+    });
+  };
+
   if (!selectedLocation) {
     return null;
   }
@@ -153,6 +168,7 @@ export const LocationBottomSheetContent = ({
           title="登録する"
           titleStyle={styles.registrationButtonTitle}
           buttonStyle={styles.registrationButton}
+          onPress={onReistrationButtonPress}
         />
       </View>
     </View>
