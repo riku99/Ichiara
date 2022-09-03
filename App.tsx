@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootStack } from 'src/navigations/RootStack';
@@ -8,7 +8,9 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.gestureHandlerRootView}>
       <NavigaitonProvider>
-        <RootStack />
+        <Suspense>
+          <RootStack />
+        </Suspense>
       </NavigaitonProvider>
     </GestureHandlerRootView>
   );

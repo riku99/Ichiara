@@ -1,4 +1,5 @@
-import { atom } from 'jotai';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 type Location = {
   lat: number;
@@ -8,4 +9,9 @@ type Location = {
   vibration: boolean;
 };
 
-export const locationsAtom = atom<Location[]>([]);
+const storage = createJSONStorage<Location[]>(() => AsyncStorage);
+export const locationsAtom = atomWithStorage<Location[]>(
+  'locations',
+  [],
+  storage
+);

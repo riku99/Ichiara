@@ -1,5 +1,7 @@
 import BottomSheet from '@gorhom/bottom-sheet';
+import { Text } from '@rneui/themed';
 import {
+  Suspense,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -183,6 +185,14 @@ export const HomeScreen = ({ navigation }: Props) => {
         />
       </BottomSheet>
     </View>
+  );
+};
+
+export const HomeScreenWithSuspense = (props: Props) => {
+  return (
+    <Suspense fallback={<Text>HomeScreen</Text>}>
+      <HomeScreen {...props} />
+    </Suspense>
   );
 };
 
