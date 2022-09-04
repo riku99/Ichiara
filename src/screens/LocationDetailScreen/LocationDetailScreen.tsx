@@ -1,8 +1,10 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useLayoutEffect } from 'react';
-import { ScrollView, StyleSheet, Switch, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Switch } from 'src/components/Switch';
 import { VStack } from 'src/components/VStack';
+import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
 
@@ -14,7 +16,7 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: '詳細',
+      title: '詳細・編集',
       headerBackTitleVisible: false,
     });
   }, [navigation]);
@@ -27,8 +29,9 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contents}>
-        <VStack space={22}>
+      <ScrollView>
+        <MapView style={styles.map} />
+        <VStack space={22} style={styles.contents}>
           <View>
             <Text style={styles.itemLabel}>場所</Text>
             <Text style={styles.itemText}>{location.title}</Text>
@@ -52,6 +55,10 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  map: {
+    width: '100%',
+    height: 140,
   },
   contents: {
     paddingHorizontal: 16,
