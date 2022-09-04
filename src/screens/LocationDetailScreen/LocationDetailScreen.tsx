@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import { Suspense, useLayoutEffect } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Switch } from 'src/components/Switch';
 import { VStack } from 'src/components/VStack';
@@ -13,6 +13,7 @@ type Props = RootNavigationScreenProp<'LocationDetail'>;
 export const LocationDetailScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
   const [locations, setLocations] = useAtom(locationsAtom);
+  const mapRef = useRef<MapView>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,6 +24,15 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
 
   const location = locations.find((l) => l.id === id);
 
+  useEffect(() => {
+    if (location) {
+      mapRef.current?.annotate({
+        lat: location.lat,
+        lng: location.lng,
+      });
+    }
+  }, [location]);
+
   if (!location) {
     return null;
   }
@@ -30,7 +40,17 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <MapView style={styles.map} />
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          customRegion={{
+            latitude: location.lat,
+            longitude: location.lng,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          showUserLocationPoint={true}
+        />
         <VStack space={22} style={styles.contents}>
           <View>
             <Text style={styles.itemLabel}>場所</Text>

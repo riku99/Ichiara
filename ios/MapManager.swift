@@ -8,6 +8,10 @@ class MapManager: RCTViewManager {
     return MapView()
   }
   
+  override var methodQueue: DispatchQueue! {
+    return DispatchQueue.main
+  }
+  
   @objc
   func searchLocation(_ node: NSNumber, text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
     let component = getMapView(tag: node)
@@ -22,13 +26,13 @@ class MapManager: RCTViewManager {
   
   @objc
   func annotate(_ node: NSNumber, coodinate: [String: Double]) {
-    let component = getMapView(tag: node)
+    let component = self.getMapView(tag: node)
     component.annotate(coodinate)
   }
   
   @objc
   func removeAllAnnotations(_ node: NSNumber) {
-    let component = getMapView(tag: node)
+    let component = self.getMapView(tag: node)
     component.removeAllAnnotations()
   }
   

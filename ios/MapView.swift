@@ -87,30 +87,22 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   func removeAllAnnotations() {
-    // annotateとこのメソッドの組み合わせの問題で、明示的にメインスレッド使わないとエラー出る
-    DispatchQueue.main.async {
-      self.removeAnnotations(self.annotations)
-    }
+    self.removeAnnotations(self.annotations)
   }
   
   func annotate(_ coodinate: [String: Double]) {
-    DispatchQueue.main.async {
-      if let lat = coodinate["lat"], let lng = coodinate["lng"] {
-        let coodinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coodinate
-        self.addAnnotation(annotation)
-      }
+    if let lat = coodinate["lat"], let lng = coodinate["lng"] {
+      let coodinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+      let annotation = MKPointAnnotation()
+      annotation.coordinate = coodinate
+      self.addAnnotation(annotation)
     }
   }
   
   func searchLocation(_ text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    // メインスレッドで実行しないとcompleterDidUpdateResultsが実行されない(?)
-    DispatchQueue.main.async {
-      self.searchCompleter.queryFragment = text
-      self.searchLocationResolver = resolve
-      self.searchLocationRjecter = reject
-    }
+    self.searchCompleter.queryFragment = text
+    self.searchLocationResolver = resolve
+    self.searchLocationRjecter = reject
   }
   
   func searchCoodinate(_ query: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -130,14 +122,12 @@ class MapView: MKMapView, MKLocalSearchCompleterDelegate, MKMapViewDelegate {
   }
   
   func showCircle(_ config: [String: Double]) {
-    DispatchQueue.main.async {
-      if let lat = config["lat"], let lng = config["lng"], let r = config["radius"] {
-        let coodinate = CLLocationCoordinate2DMake(lat, lng)
-        let radius = CLLocationDistance(r)
-        self.mapCircle = MKCircle(center: coodinate, radius: radius)
-        if let circle = self.mapCircle {
-          self.addOverlay(circle)
-        }
+    if let lat = config["lat"], let lng = config["lng"], let r = config["radius"] {
+      let coodinate = CLLocationCoordinate2DMake(lat, lng)
+      let radius = CLLocationDistance(r)
+      self.mapCircle = MKCircle(center: coodinate, radius: radius)
+      if let circle = self.mapCircle {
+        self.addOverlay(circle)
       }
     }
   }
