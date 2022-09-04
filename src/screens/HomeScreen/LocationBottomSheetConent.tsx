@@ -1,8 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
@@ -24,7 +24,12 @@ export const LocationBottomSheetContent = ({
   setRadius,
 }: Props) => {
   const [vibration, setVibration] = useState(true);
+  const [isFavorited, setIsFavorited] = useState(false);
   const [, setLocations] = useAtom(locationsAtom);
+
+  useEffect(() => {
+    setIsFavorited(false);
+  }, [selectedLocation]);
 
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -107,6 +112,7 @@ export const LocationBottomSheetContent = ({
         id,
         radius,
         vibration,
+        isFavorited,
       };
       const newLocations = [newData, ...c];
       return newLocations;
@@ -158,6 +164,23 @@ export const LocationBottomSheetContent = ({
           </View>
         </View>
 
+        <View style={styles.content2}>
+          <Text style={styles.itemLabel}>お気に入り</Text>
+          <Pressable
+            onPress={() => {
+              setIsFavorited((c) => !c);
+            }}
+            style={{ width: 26 }}
+          >
+            <FontAwesome
+              name={isFavorited ? 'bookmark' : 'bookmark-o'}
+              size={26}
+              color={isFavorited ? '#ffc738' : '#2b2b2b'}
+              style={[styles.item]}
+            />
+          </Pressable>
+        </View>
+
         <Button
           containerStyle={styles.registrationButtonContainer}
           title="登録する"
@@ -200,13 +223,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  content2: {
+    marginTop: 24,
+  },
   itemLabel: {
     fontWeight: 'bold',
     color: 'gray',
     fontSize: 16,
   },
   item: {
-    marginTop: 4,
+    marginTop: 6,
   },
   radius: {
     fontSize: 22,
