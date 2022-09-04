@@ -1,7 +1,7 @@
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreenWithSuspense } from 'src/screens/HomeScreen';
-import { ListScreenWithSuspense } from 'src/screens/ListScreen';
+import { ListStack } from './ListStack';
 
 export type BottomTabParamList = {
   HomeTab: undefined;
@@ -25,12 +25,13 @@ export const BottomTab = () => {
       />
       <Tab.Screen
         name="ListTab"
-        component={ListScreenWithSuspense}
+        component={ListStack}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="list" size={ICON_SIZE} color={color} />
           ),
           tabBarLabel: 'リスト',
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
+import { formatRadius } from 'src/utils';
 import { SelectedLocation } from './type';
 
 type Props = {
@@ -98,18 +99,12 @@ export const LocationBottomSheetContent = ({
     }
   };
 
-  const formatRadius = (r: number) => {
-    if (r < 1000) {
-      return `${r}m`;
-    } else {
-      return `${r / 1000}km`;
-    }
-  };
-
   const onReistrationButtonPress = () => {
+    const id = Math.random().toString(32).substring(2);
     setLocations((c) => {
       const newData = {
         ...selectedLocation,
+        id,
         radius,
         vibration,
       };

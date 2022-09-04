@@ -5,7 +5,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Loading } from 'src/components/Loading';
 import { Location as StoredLocation, locationsAtom } from 'src/stores';
 
-type Props = RootNavigationScreenProp<'BottomTab'>;
+type Props = RootNavigationScreenProp<'List'>;
 
 const ListScreen = ({ navigation }: Props) => {
   const [locations] = useAtom(locationsAtom);
@@ -20,23 +20,39 @@ const ListScreen = ({ navigation }: Props) => {
     console.log(locations);
   }, [locations]);
 
-  const renderItem = useCallback(({ item }: { item: StoredLocation }) => {
-    return (
-      <Pressable style={styles.locationItemContainer}>
-        <Text style={styles.locationTitle}>{item.title}</Text>
-      </Pressable>
-    );
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: { item: StoredLocation }) => {
+      const onPress = () => {
+        navigation.navigate('LocationDetail');
+      };
+
+      return (
+        <Pressable onPress={onPress}>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.locationItemContainer,
+                { backgroundColor: pressed ? '#f2f2f2' : undefined },
+              ]}
+            >
+              <Text style={styles.locationTitle}>{item.title}</Text>
+            </View>
+          )}
+        </Pressable>
+      );
+    },
+    [navigation]
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
         data={locations}
         renderItem={renderItem}
-        keyExtractor={(_, index) => index.toString()}
+        keyExtractor={(item, index) => item.id}
         contentContainerStyle={styles.contentContainer}
         ListFooterComponent={() => <View style={styles.suggestedListFotter} />}
-        ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+        // ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
       />
     </View>
   );
@@ -48,13 +64,12 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingLeft: 16,
-    marginTop: 20,
+    marginTop: 10,
   },
   locationItemContainer: {
-    height: 50,
     borderBottomWidth: 0.5,
     borderBottomColor: '#e3e3e3',
-    paddingBottom: 10,
+    paddingVertical: 20,
   },
   locationTitle: {
     fontWeight: 'bold',

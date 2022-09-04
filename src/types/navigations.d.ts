@@ -1,4 +1,5 @@
-type AllStackParamList = import('../navigations/RootStack').RootStackParamList;
+type AllStackParamList = import('../navigations/RootStack').RootStackParamList &
+  import('../navigations/ListStack').ListStackParamList;
 
 type RootNavigationScreenProp<
   T extends keyof AllStackParamList
