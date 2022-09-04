@@ -3,44 +3,49 @@ import UIKit
 
 @objc(MapManager)
 class MapManager: RCTViewManager {
-  let mapView = MapView()
   
   override func view() -> UIView! {
-    return mapView
+    return MapView()
   }
   
   @objc
-  func searchLocation(_ text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    mapView.searchLocation(text, resolve: resolve, rejecter: reject)
+  func searchLocation(_ node: NSNumber, text: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let component = getMapView(tag: node)
+    component.searchLocation(text, resolve: resolve, rejecter: reject)
   }
   
   @objc
-  func searchCoodinate(_ query: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-    mapView.searchCoodinate(query, resolve: resolve, rejecter: reject)
+  func searchCoodinate(_ node: NSNumber, query: String!, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+    let component = getMapView(tag: node)
+    component.searchCoodinate(query, resolve: resolve, rejecter: reject)
   }
   
   @objc
-  func annotate(_ coodinate: [String: Double]) {
-    mapView.annotate(coodinate)
+  func annotate(_ node: NSNumber, coodinate: [String: Double]) {
+    let component = getMapView(tag: node)
+    component.annotate(coodinate)
   }
   
   @objc
-  func removeAllAnnotations() {
-    mapView.removeAllAnnotations()
+  func removeAllAnnotations(_ node: NSNumber) {
+    let component = getMapView(tag: node)
+    component.removeAllAnnotations()
   }
   
   @objc
-  func showCircle(_ config: [String: Double]) {
-    mapView.showCircle(config)
+  func showCircle(_ node: NSNumber, config: [String: Double]) {
+    let component = getMapView(tag: node)
+    component.showCircle(config)
   }
   
   @objc
-  func removeCurrentCircle() {
-    mapView.removeCurrentCircle()
+  func removeCurrentCircle(_ node: NSNumber) {
+    let component = getMapView(tag: node)
+    component.removeCurrentCircle()
   }
   
   func getMapView(tag: NSNumber) -> MapView {
-    return bridge.uiManager.view(forReactTag: tag) as! MapView
+    return self.bridge.uiManager.view(forReactTag: tag) as! MapView
   }
   
   override static func requiresMainQueueSetup() -> Bool {

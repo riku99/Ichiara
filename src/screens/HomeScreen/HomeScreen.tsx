@@ -19,6 +19,7 @@ import { SelectedLocation } from './type';
 type Props = RootNavigationScreenProp<'BottomTab'>;
 
 export const HomeScreen = ({ navigation }: Props) => {
+  const isInitialRender = useRef(true);
   const mapRef = useRef<MapView>(null);
   const searchBottomSheetRef = useRef<BottomSheet>(null);
   const locationBottomSheetRef = useRef<BottomSheet>(null);
@@ -76,11 +77,16 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     if (!selectedLocation) {
       (async () => {
-        locationBottomSheetRef.current?.close();
-        await Promise.all([
-          mapRef.current?.removeCurrentCircle(),
-          mapRef.current?.removeAllAnnotations(),
-        ]);
+        if (isInitialRender.current) {
+          isInitialRender.current = false;
+          return;
+        } else {
+          locationBottomSheetRef.current?.close();
+          await Promise.all([
+            mapRef.current?.removeCurrentCircle(),
+            mapRef.current?.removeAllAnnotations(),
+          ]);
+        }
       })();
     }
   }, [selectedLocation]);
