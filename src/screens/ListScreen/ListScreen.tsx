@@ -1,6 +1,6 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import { Suspense, useCallback, useEffect, useLayoutEffect } from 'react';
+import { Suspense, useCallback, useLayoutEffect } from 'react';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Loading } from 'src/components/Loading';
 import { Location as StoredLocation, locationsAtom } from 'src/stores';
@@ -16,14 +16,10 @@ const ListScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
-  useEffect(() => {
-    console.log(locations);
-  }, [locations]);
-
   const renderItem = useCallback(
     ({ item }: { item: StoredLocation }) => {
       const onPress = () => {
-        navigation.navigate('LocationDetail');
+        navigation.navigate('LocationDetail', { id: item.id });
       };
 
       return (

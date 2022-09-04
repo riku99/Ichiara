@@ -1,1 +1,1 @@
-export * from './LocationDetailScree';
+export * from './LocationDetailScreen';
