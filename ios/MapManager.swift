@@ -39,6 +39,10 @@ class MapManager: RCTViewManager {
     mapView.removeCurrentCircle()
   }
   
+  func getMapView(tag: NSNumber) -> MapView {
+    return bridge.uiManager.view(forReactTag: tag) as! MapView
+  }
+  
   override static func requiresMainQueueSetup() -> Bool {
     return true
   }
