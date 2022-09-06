@@ -4,6 +4,7 @@ import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { btoa } from 'react-native-quick-base64';
 import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
@@ -105,7 +106,9 @@ export const LocationBottomSheetContent = ({
   };
 
   const onReistrationButtonPress = () => {
-    const id = Math.random().toString(32).substring(2);
+    const base =
+      selectedLocation.lat.toString() + selectedLocation.lng.toString();
+    const id = btoa(base);
     setLocations((c) => {
       const newData = {
         ...selectedLocation,
