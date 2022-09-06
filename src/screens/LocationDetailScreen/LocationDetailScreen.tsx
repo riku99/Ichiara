@@ -6,9 +6,10 @@ import {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { RadiusMenu } from 'src/components/RadiusMenu';
 import { Switch } from 'src/components/Switch';
 import { VStack } from 'src/components/VStack';
 import { MapView } from 'src/nativeComponents/MapView';
@@ -53,15 +54,18 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     if (location) {
-      mapRef.current?.annotate({
-        lat: location.lat,
-        lng: location.lng,
-      });
-      mapRef.current?.showCircle({
-        lat: location.lat,
-        lng: location.lng,
-        radius: location.radius,
-      });
+      (async () => {
+        await mapRef.current?.removeCurrentCircle()
+        mapRef.current?.annotate({
+          lat: location.lat,
+          lng: location.lng,
+        });
+        mapRef.current?.showCircle({
+          lat: location.lat,
+          lng: location.lng,
+          radius: location.radius,
+        });
+      })()
     }
   }, [location.lat, location.lng, location.radius]);
 
@@ -69,6 +73,13 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
     setLocation({
       ...location,
       vibration: value,
+    });
+  };
+
+  const onChangeRadius = (radius: number) => {
+    setLocation({
+      ...location,
+      radius,
     });
   };
 
@@ -101,10 +112,14 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
             <Text style={styles.itemText}>{location.title}</Text>
           </View>
 
-          <View>
-            <Text style={styles.itemLabel}>お知らせする範囲</Text>
-            <Text style={styles.itemText}>{formatRadius(location.radius)}</Text>
-          </View>
+          <RadiusMenu onChangeRadius={onChangeRadius}>
+            <View>
+              <Text style={styles.itemLabel}>お知らせする範囲</Text>
+              <Text style={styles.itemText}>
+                {formatRadius(location.radius)}
+              </Text>
+            </View>
+          </RadiusMenu>
 
           <View>
             <Text style={styles.itemLabel}>バイブレーション</Text>

@@ -1,11 +1,11 @@
 import { AntDesign } from '@expo/vector-icons';
-import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { btoa } from 'react-native-quick-base64';
 import { useToast } from 'react-native-toast-notifications';
+import { RadiusMenu } from 'src/components/RadiusMenu';
 import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
@@ -31,75 +31,6 @@ export const LocationBottomSheetContent = ({
 
   const onClosePress = () => {
     setSelectedLocation(null);
-  };
-
-  const radiusMenuActions: MenuAction[] = [
-    {
-      id: 'custom',
-      title: 'カスタム',
-    },
-    {
-      id: '2000',
-      title: '2km',
-    },
-    {
-      id: '1000',
-      title: '1km',
-    },
-    {
-      id: '500',
-      title: '500m',
-    },
-    {
-      id: '300',
-      title: '300m',
-    },
-  ];
-
-  const onRadiusMenuActionPress = (id: string) => {
-    switch (id) {
-      case '300':
-        setRadius(300);
-        break;
-      case '500':
-        setRadius(500);
-        break;
-      case '1000':
-        setRadius(1000);
-        break;
-      case '2000':
-        setRadius(2000);
-        break;
-      case 'custom':
-        Alert.prompt(
-          'お知らせする範囲をメートルで入力してください',
-          '',
-          [
-            {
-              text: 'キャンセル',
-              style: 'cancel',
-            },
-            {
-              text: '設定',
-              onPress: (input) => {
-                const r = Number(input);
-                if (r) {
-                  if (r < 300 || r > 3000) {
-                    Alert.alert('設定できる範囲は300m以上3km以下です');
-                    return;
-                  }
-                  setRadius(r);
-                } else {
-                  Alert.alert('入力値が不正です');
-                }
-              },
-            },
-          ],
-          'plain-text',
-          '',
-          'number-pad'
-        );
-    }
   };
 
   const onReistrationButtonPress = () => {
@@ -141,11 +72,9 @@ export const LocationBottomSheetContent = ({
 
       <View style={styles.content}>
         <View style={styles.content1}>
-          {/* @ts-ignore https://github.com/react-native-menu/menu/pull/416  */}
-          <MenuView
-            actions={radiusMenuActions}
-            onPressAction={({ nativeEvent }) => {
-              onRadiusMenuActionPress(nativeEvent.event);
+          <RadiusMenu
+            onChangeRadius={(radius: number) => {
+              setRadius(radius);
             }}
           >
             <Pressable>
@@ -154,7 +83,7 @@ export const LocationBottomSheetContent = ({
                 {formatRadius(radius)}
               </Text>
             </Pressable>
-          </MenuView>
+          </RadiusMenu>
 
           <View>
             <Text style={styles.itemLabel}>バイブレーション</Text>

@@ -13,7 +13,7 @@ const ListScreen = ({ navigation }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'お知らせする場所',
+      title: '登録されている場所',
     });
   }, [navigation]);
 
