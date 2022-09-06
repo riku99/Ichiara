@@ -1,14 +1,7 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import {
-  Suspense,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState
-} from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { RadiusMenu } from 'src/components/RadiusMenu';
 import { Switch } from 'src/components/Switch';
 import { VStack } from 'src/components/VStack';
@@ -24,38 +17,39 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
   const [locations, setLocations] = useAtom(locationsAtom);
   const [location, setLocation] = useState(locations.find((l) => l.id === id));
   const mapRef = useRef<MapView>(null);
+  const isFirstRender = useRef(true);
 
-  const onSavePress = useCallback(() => {
-    setLocations((c) => {
-      const newData = c.map((l) => {
-        if (l.id === id) {
-          return location;
-        } else {
-          return l;
-        }
-      });
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      if (location) {
+        setLocations((c) => {
+          const newData = c.map((l) => {
+            if (l.id === id) {
+              return location;
+            } else {
+              return l;
+            }
+          });
 
-      return newData;
-    });
-    navigation.goBack();
-  }, [navigation, setLocations, location]);
+          return newData;
+        });
+      }
+    } else {
+      isFirstRender.current = false;
+    }
+  }, [location]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: '詳細・編集',
       headerBackTitleVisible: false,
-      headerRight: () => (
-        <Pressable onPress={onSavePress}>
-          <Text style={styles.saveText}>保存</Text>
-        </Pressable>
-      ),
     });
-  }, [navigation, onSavePress]);
+  }, [navigation]);
 
   useEffect(() => {
     if (location) {
       (async () => {
-        await mapRef.current?.removeCurrentCircle()
+        await mapRef.current?.removeCurrentCircle();
         mapRef.current?.annotate({
           lat: location.lat,
           lng: location.lng,
@@ -65,7 +59,7 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
           lng: location.lng,
           radius: location.radius,
         });
-      })()
+      })();
     }
   }, [location.lat, location.lng, location.radius]);
 
