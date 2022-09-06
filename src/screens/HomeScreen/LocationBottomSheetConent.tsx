@@ -1,8 +1,8 @@
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { MenuAction, MenuView } from '@react-native-menu/menu';
 import { Button, Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { btoa } from 'react-native-quick-base64';
 import { MapView } from 'src/nativeComponents/MapView';
@@ -25,12 +25,7 @@ export const LocationBottomSheetContent = ({
   setRadius,
 }: Props) => {
   const [vibration, setVibration] = useState(true);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [, setLocations] = useAtom(locationsAtom);
-
-  useEffect(() => {
-    setIsFavorited(false);
-  }, [selectedLocation]);
+  const [locations, setLocations] = useAtom(locationsAtom);
 
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -109,13 +104,17 @@ export const LocationBottomSheetContent = ({
     const base =
       selectedLocation.lat.toString() + selectedLocation.lng.toString();
     const id = btoa(base);
+    const sameIdLocation = locations.some((l) => l.id === id);
+    if (sameIdLocation) {
+      Alert.alert('同じ場所を複数登録することはできません。');
+      return;
+    }
     setLocations((c) => {
       const newData = {
         ...selectedLocation,
         id,
         radius,
         vibration,
-        isFavorited,
       };
       const newLocations = [newData, ...c];
       return newLocations;
@@ -165,23 +164,6 @@ export const LocationBottomSheetContent = ({
               }}
             />
           </View>
-        </View>
-
-        <View style={styles.content2}>
-          <Text style={styles.itemLabel}>お気に入り</Text>
-          <Pressable
-            onPress={() => {
-              setIsFavorited((c) => !c);
-            }}
-            style={{ width: 26 }}
-          >
-            <FontAwesome
-              name={isFavorited ? 'bookmark' : 'bookmark-o'}
-              size={26}
-              color={isFavorited ? '#ffc738' : '#2b2b2b'}
-              style={[styles.item]}
-            />
-          </Pressable>
         </View>
 
         <Button
