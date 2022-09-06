@@ -1,14 +1,14 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useCallback, useLayoutEffect } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { Loading } from 'src/components/Loading';
 import { Location as StoredLocation, locationsAtom } from 'src/stores';
 
 type Props = RootNavigationScreenProp<'List'>;
 
 const ListScreen = ({ navigation }: Props) => {
-  const [locations] = useAtom(locationsAtom);
+  const [locations, setLocations] = useAtom(locationsAtom);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -22,6 +22,22 @@ const ListScreen = ({ navigation }: Props) => {
         navigation.navigate('LocationDetail', { id: item.id });
       };
 
+      const onSwitchChange = (value: boolean) => {
+        setLocations((c) => {
+          const newData = c.map((l) => {
+            if (l.id === item.id) {
+              return {
+                ...l,
+                isOn: value,
+              };
+            } else {
+              return l;
+            }
+          });
+          return newData;
+        });
+      };
+
       return (
         <Pressable onPress={onPress}>
           {({ pressed }) => (
@@ -32,12 +48,13 @@ const ListScreen = ({ navigation }: Props) => {
               ]}
             >
               <Text style={styles.locationTitle}>{item.title}</Text>
+              <Switch value={item.isOn} onValueChange={onSwitchChange} />
             </View>
           )}
         </Pressable>
       );
     },
-    [navigation]
+    [navigation, setLocations]
   );
 
   return (
@@ -66,6 +83,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: '#e3e3e3',
     paddingVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 16,
   },
   locationTitle: {
     fontWeight: 'bold',

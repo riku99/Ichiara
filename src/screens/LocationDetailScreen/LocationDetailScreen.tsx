@@ -30,6 +30,11 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
         lat: location.lat,
         lng: location.lng,
       });
+      mapRef.current?.showCircle({
+        lat: location.lat,
+        lng: location.lng,
+        radius: location.radius,
+      });
     }
   }, [location]);
 

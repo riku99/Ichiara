@@ -117,6 +117,7 @@ export const LocationBottomSheetContent = ({
         id,
         radius,
         vibration,
+        isOn: true,
       };
       const newLocations = [newData, ...c];
       return newLocations;

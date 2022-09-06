@@ -8,6 +8,7 @@ export type Location = {
   title: string;
   radius: number;
   vibration: boolean;
+  isOn: boolean;
 };
 
 const storage = createJSONStorage<Location[]>(() => AsyncStorage);
