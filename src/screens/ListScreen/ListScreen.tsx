@@ -1,8 +1,9 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useCallback, useLayoutEffect } from 'react';
-import { FlatList, Pressable, StyleSheet, Switch, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Loading } from 'src/components/Loading';
+import { Switch } from 'src/components/Switch';
 import { Location as StoredLocation, locationsAtom } from 'src/stores';
 
 type Props = RootNavigationScreenProp<'List'>;
@@ -65,7 +66,6 @@ const ListScreen = ({ navigation }: Props) => {
         keyExtractor={(item, index) => item.id}
         contentContainerStyle={styles.contentContainer}
         ListFooterComponent={() => <View style={styles.suggestedListFotter} />}
-        // ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
       />
     </View>
   );
