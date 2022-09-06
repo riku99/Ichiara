@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { btoa } from 'react-native-quick-base64';
+import { useToast } from 'react-native-toast-notifications';
 import { MapView } from 'src/nativeComponents/MapView';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
@@ -26,6 +27,7 @@ export const LocationBottomSheetContent = ({
 }: Props) => {
   const [vibration, setVibration] = useState(true);
   const [locations, setLocations] = useAtom(locationsAtom);
+  const toast = useToast();
 
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -119,6 +121,8 @@ export const LocationBottomSheetContent = ({
       const newLocations = [newData, ...c];
       return newLocations;
     });
+
+    toast.show('登録しました');
   };
 
   if (!selectedLocation) {
