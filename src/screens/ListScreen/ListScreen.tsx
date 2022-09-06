@@ -1,7 +1,8 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useCallback, useLayoutEffect } from 'react';
-import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { Loading } from 'src/components/Loading';
 import { Switch } from 'src/components/Switch';
 import { Location as StoredLocation, locationsAtom } from 'src/stores';
@@ -45,7 +46,7 @@ const ListScreen = ({ navigation }: Props) => {
             <View
               style={[
                 styles.locationItemContainer,
-                { backgroundColor: pressed ? '#f2f2f2' : undefined },
+                { backgroundColor: pressed ? '#f2f2f2' : '#fff' },
               ]}
             >
               <Text style={styles.locationTitle}>{item.title}</Text>
@@ -58,14 +59,27 @@ const ListScreen = ({ navigation }: Props) => {
     [navigation, setLocations]
   );
 
+  const renderHiddenItem = useCallback(({ item }: { item: StoredLocation }) => {
+    return (
+      <Pressable style={styles.rowBack}>
+        <View style={styles.deleteButton}>
+          <Text style={styles.deleteText}>削除</Text>
+        </View>
+      </Pressable>
+    );
+  }, []);
+
   return (
     <View style={styles.container}>
-      <FlatList
+      <SwipeListView
         data={locations}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id}
         contentContainerStyle={styles.contentContainer}
         ListFooterComponent={() => <View style={styles.suggestedListFotter} />}
+        rightOpenValue={-80}
+        disableRightSwipe
+        renderHiddenItem={renderHiddenItem}
       />
     </View>
   );
@@ -96,6 +110,24 @@ const styles = StyleSheet.create({
   },
   itemSeparator: {
     height: 10,
+  },
+  deleteButton: {
+    width: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#FFF',
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#fc2519',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
   },
 });
 
