@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useCallback, useLayoutEffect } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Loading } from 'src/components/Loading';
 import { Switch } from 'src/components/Switch';
@@ -60,12 +60,28 @@ const ListScreen = ({ navigation }: Props) => {
   );
 
   const renderHiddenItem = useCallback(({ item }: { item: StoredLocation }) => {
+    const onDeleteButtonPress = () => {
+      Alert.alert('削除しますか?', '', [
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+        },
+        {
+          text: '削除',
+          style: 'destructive',
+          onPress: () => {
+            setLocations((c) => c.filter((l) => l.id !== item.id));
+          },
+        },
+      ]);
+    };
+
     return (
-      <Pressable style={styles.rowBack}>
-        <View style={styles.deleteButton}>
+      <View style={styles.rowBack}>
+        <Pressable style={styles.deleteButton} onPress={onDeleteButtonPress}>
           <Text style={styles.deleteText}>削除</Text>
-        </View>
-      </Pressable>
+        </Pressable>
+      </View>
     );
   }, []);
 
@@ -113,8 +129,10 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     width: 80,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#fc2519',
   },
   deleteText: {
     fontWeight: 'bold',
@@ -122,12 +140,9 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   rowBack: {
-    alignItems: 'center',
-    backgroundColor: '#fc2519',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingLeft: 15,
   },
 });
 
