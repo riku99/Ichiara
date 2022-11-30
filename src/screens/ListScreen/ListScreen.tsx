@@ -61,7 +61,7 @@ const ListScreen = ({ navigation }: Props) => {
 
   const renderHiddenItem = useCallback(({ item }: { item: StoredLocation }) => {
     const onDeleteButtonPress = () => {
-      Alert.alert('削除しますか?', '', [
+      Alert.alert('削除してよろしいですか?', '', [
         {
           text: 'キャンセル',
           style: 'cancel',

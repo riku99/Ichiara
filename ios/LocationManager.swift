@@ -10,6 +10,7 @@ class LocationManager: RCTEventEmitter {
     super.init()
     locationManager.delegate = self
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    locationManager.distanceFilter = 5
   }
   
   @objc
@@ -41,17 +42,29 @@ class LocationManager: RCTEventEmitter {
   
   @objc
   override func supportedEvents() -> [String]! {
-    return ["onAuthorizationStatusDidChange"]
+    return ["onAuthorizationStatusDidChange", "onLocationDidUpdate"]
   }
   
   @objc
   override static func requiresMainQueueSetup() -> Bool {
     return false
   }
+  
 }
 
 extension LocationManager: CLLocationManagerDelegate {
+  func sendLocationUpdateEvent(_ location: [String: Double]) {
+    return sendEvent(withName: "onLocationDidUpdate", body: location)
+  }
+
+  
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    if let newLocation = locations.last {
+      sendLocationUpdateEvent([
+        "latitude": newLocation.coordinate.latitude,
+        "longitude": newLocation.coordinate.longitude
+      ])
+    }
     
   }
   
@@ -78,9 +91,12 @@ extension LocationManager: CLLocationManagerDelegate {
       break
     case .authorizedWhenInUse:
       sendAuthorizationChangedEvent("authorizedWhenInUse")
+      locationManager.startUpdatingLocation()
       break
     case .authorizedAlways:
       sendAuthorizationChangedEvent("authorizedAlways")
+      locationManager.startUpdatingLocation()
+      break
     default:
       break
     }

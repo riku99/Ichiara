@@ -74,8 +74,8 @@
 				327257F428A8C7CC0054B36B /* MapManager.swift */,
 				327257F628A8CCC40054B36B /* MapManager.m */,
 				327257F928A903100054B36B /* LocationManager.swift */,
-				327257FD28AE6B440054B36B /* LocationManagerError.swift */,
 				327257FB28A904340054B36B /* LocationManager.m */,
+				327257FD28AE6B440054B36B /* LocationManagerError.swift */,
 				327257F328A8C7AC0054B36B /* Ichiara-Bridging-Header.h */,
 			);
 			name = Ichiara;

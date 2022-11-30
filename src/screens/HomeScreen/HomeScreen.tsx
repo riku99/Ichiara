@@ -1,6 +1,8 @@
 import BottomSheet from '@gorhom/bottom-sheet';
 import { Text } from '@rneui/themed';
-import {
+import { isPointWithinRadius } from 'geolib';
+import { useAtom } from 'jotai';
+import React, {
   Suspense,
   useCallback,
   useEffect,
@@ -12,6 +14,7 @@ import {
 import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
+import { locationsAtom } from 'src/stores';
 import { BottomSheetContent } from './BottonSheetContent';
 import { LocationBottomSheetContent } from './LocationBottomSheetConent';
 import { SelectedLocation } from './type';
@@ -30,6 +33,7 @@ export const HomeScreen = ({ navigation }: Props) => {
     setSelectedLocation,
   ] = useState<null | SelectedLocation>(null);
   const [radius, setRadius] = useState(500);
+  const [registeredLocations] = useAtom(locationsAtom);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -119,6 +123,34 @@ export const HomeScreen = ({ navigation }: Props) => {
     }
   }, [selectedLocation, radius]);
 
+  // 自分の位置情報が更新された際の処理
+  useEffect(() => {
+    const subscription = Location.locationUpdateListener(
+      async (eventLocation) => {
+        try {
+          registeredLocations.forEach((locationData) => {
+            const inRadius = isPointWithinRadius(
+              eventLocation,
+              { latitude: locationData.lat, longitude: locationData.lng },
+              locationData.radius
+            );
+
+            console.log('inRadius is ' + inRadius);
+            if (inRadius) {
+              return;
+            }
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [registeredLocations]);
+
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;
     Promise.all([
@@ -148,7 +180,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         style={styles.mapView}
         onMapPress={onMapPress}
         ref={mapRef}
-        showUserLocationPoint={true}
+        showUserLocationPoint
         customRegion={
           region && {
             ...region,
@@ -196,7 +228,7 @@ export const HomeScreen = ({ navigation }: Props) => {
 
 export const HomeScreenWithSuspense = (props: Props) => {
   return (
-    <Suspense fallback={<Text>HomeScreen</Text>}>
+    <Suspense fallback={<Text>読み込み中...</Text>}>
       <HomeScreen {...props} />
     </Suspense>
   );

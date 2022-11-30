@@ -13,3 +13,5 @@ export type Location = {
   latitude: number;
   longitude: number;
 };
+
+export type LocationUpdateEvent = Location;

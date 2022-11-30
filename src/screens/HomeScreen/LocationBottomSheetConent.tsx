@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { Button, Text } from '@rneui/themed';
+import { isPointWithinRadius } from 'geolib';
 import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
@@ -7,6 +8,7 @@ import { btoa } from 'react-native-quick-base64';
 import { useToast } from 'react-native-toast-notifications';
 import { RadiusMenu } from 'src/components/RadiusMenu';
 import { MapView } from 'src/nativeComponents/MapView';
+import { getCurrentLocation } from 'src/nativeModules/Location';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
 import { SelectedLocation } from './type';
@@ -33,28 +35,47 @@ export const LocationBottomSheetContent = ({
     setSelectedLocation(null);
   };
 
-  const onReistrationButtonPress = () => {
-    const base =
-      selectedLocation.lat.toString() + selectedLocation.lng.toString();
-    const id = btoa(base);
-    const sameIdLocation = locations.some((l) => l.id === id);
-    if (sameIdLocation) {
-      Alert.alert('同じ場所を複数登録することはできません。');
-      return;
-    }
-    setLocations((c) => {
-      const newData = {
-        ...selectedLocation,
-        id,
-        radius,
-        vibration,
-        isOn: true,
-      };
-      const newLocations = [newData, ...c];
-      return newLocations;
-    });
+  const onReistrationButtonPress = async () => {
+    try {
+      const currentPosition = await getCurrentLocation();
+      const inRadius = isPointWithinRadius(
+        currentPosition,
+        selectedLocation,
+        radius
+      );
 
-    toast.show('登録しました');
+      if (inRadius) {
+        Alert.alert(
+          '登録できませんでした',
+          '既に半径内にユーザーがいる場合は登録できません。'
+        );
+        return;
+      }
+
+      const base =
+        selectedLocation.lat.toString() + selectedLocation.lng.toString();
+      const id = btoa(base);
+      const sameIdLocation = locations.some((l) => l.id === id);
+      if (sameIdLocation) {
+        Alert.alert('同じ場所を複数登録することはできません。');
+        return;
+      }
+      setLocations((c) => {
+        const newData = {
+          ...selectedLocation,
+          id,
+          radius,
+          vibration,
+          isOn: true,
+        };
+        const newLocations = [newData, ...c];
+        return newLocations;
+      });
+
+      toast.show('登録しました');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   if (!selectedLocation) {
