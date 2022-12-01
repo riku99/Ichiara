@@ -39,6 +39,10 @@
 	<string>アラームを鳴らすために位置情報を使用します。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>アラームを鳴らすために位置情報を使用します。</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

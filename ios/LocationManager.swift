@@ -11,6 +11,7 @@ class LocationManager: RCTEventEmitter {
     locationManager.delegate = self
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
     locationManager.distanceFilter = 5
+    locationManager.allowsBackgroundLocationUpdates = true
   }
   
   @objc

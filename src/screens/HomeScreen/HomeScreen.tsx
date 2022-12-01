@@ -127,6 +127,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     const subscription = Location.locationUpdateListener(
       async (eventLocation) => {
+        console.log('Run ' + new Date());
         try {
           registeredLocations.forEach((locationData) => {
             const inRadius = isPointWithinRadius(
@@ -135,7 +136,7 @@ export const HomeScreen = ({ navigation }: Props) => {
               locationData.radius
             );
 
-            console.log('inRadius is ' + inRadius);
+            console.log('inRadius is ' + inRadius + new Date());
             if (inRadius) {
               return;
             }
