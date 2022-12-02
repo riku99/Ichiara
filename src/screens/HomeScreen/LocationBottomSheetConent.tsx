@@ -15,7 +15,7 @@ import { SelectedLocation } from './type';
 
 type Props = {
   selectedLocation: SelectedLocation | null;
-  setSelectedLocation: (l: SelectedLocation) => void;
+  setSelectedLocation: (l: SelectedLocation | null) => void;
   mapRef: React.RefObject<MapView>;
   radius: number;
   setRadius: (n: number) => void;
@@ -37,6 +37,10 @@ export const LocationBottomSheetContent = ({
 
   const onReistrationButtonPress = async () => {
     try {
+      if (!selectedLocation) {
+        return;
+      }
+
       const currentPosition = await getCurrentLocation();
       const inRadius = isPointWithinRadius(
         currentPosition,

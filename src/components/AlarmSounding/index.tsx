@@ -1,13 +1,43 @@
+import { useAtom } from 'jotai';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { alarm } from 'src/sound';
+import { locationsAtom } from 'src/stores';
+import { soundAlarmLocationIdAtom } from 'src/stores/soundAlarmLocationId';
 import { theme } from 'src/styles';
 
 export const AlarmSounding = () => {
+  const [soundAlarmLocationId, setSoundAlarmLocationId] = useAtom(
+    soundAlarmLocationIdAtom
+  );
+  const [locations, setLocations] = useAtom(locationsAtom);
+
+  const onStopButtonPress = () => {
+    setSoundAlarmLocationId(null);
+    alarm.stop();
+    setLocations((c) => {
+      return c.map((locationData) => {
+        if (locationData.id === soundAlarmLocationId) {
+          return {
+            ...locationData,
+            isOn: false,
+          };
+        } else {
+          return locationData;
+        }
+      });
+    });
+  };
+
+  if (!soundAlarmLocationId) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.alertText}>もうすぐ目的地です</Text>
 
-        <Pressable style={styles.stopButton}>
+        <Pressable style={styles.stopButton} onPress={onStopButtonPress}>
           <Text style={styles.stopText}>アラームを止める</Text>
         </Pressable>
       </View>

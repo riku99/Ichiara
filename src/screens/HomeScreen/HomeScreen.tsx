@@ -16,6 +16,7 @@ import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
 import { alarm } from 'src/sound';
 import { locationsAtom } from 'src/stores';
+import { soundAlarmLocationIdAtom } from 'src/stores/';
 import { BottomSheetContent } from './BottonSheetContent';
 import { LocationBottomSheetContent } from './LocationBottomSheetConent';
 import { SelectedLocation } from './type';
@@ -28,14 +29,16 @@ export const HomeScreen = ({ navigation }: Props) => {
   const searchBottomSheetRef = useRef<BottomSheet>(null);
   const locationBottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['12%', '25%', '90%'], []);
-  const [region, setRegion] = useState<null | Region>(null);
+  const [region, setRegion] = useState<undefined | Region>(undefined);
   const [
     selectedLocation,
     setSelectedLocation,
   ] = useState<null | SelectedLocation>(null);
   const [radius, setRadius] = useState(500);
   const [registeredLocations] = useAtom(locationsAtom);
-  const [alarmSounding, setAlarmSounding] = useState(false);
+  const [soundAlarmLocationId, setSoundAlarmLocationId] = useAtom(
+    soundAlarmLocationIdAtom
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -139,13 +142,12 @@ export const HomeScreen = ({ navigation }: Props) => {
 
             console.log('inRadius is ' + inRadius + ' ' + new Date());
             if (inRadius && locationData.isOn) {
-              if (!alarmSounding) {
-                setAlarmSounding(true);
-                console.log('play alarm');
+              if (!soundAlarmLocationId) {
+                setSoundAlarmLocationId(locationData.id);
                 alarm.play((success) => {
                   if (success) {
                     console.log('successfully finished playing');
-                    setAlarmSounding(false);
+                    setSoundAlarmLocationId(null);
                   } else {
                     console.log('playback failed due to audio decoding errors');
                   }
@@ -163,14 +165,19 @@ export const HomeScreen = ({ navigation }: Props) => {
     return () => {
       subscription.remove();
     };
-  }, [registeredLocations, alarmSounding, setAlarmSounding]);
+  }, [registeredLocations, soundAlarmLocationId, setSoundAlarmLocationId]);
 
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;
+    if (!address) {
+      return;
+    }
+
     Promise.all([
       mapRef.current?.removeAllAnnotations(),
       mapRef.current?.annotate({ lat: latitude, lng: longitude }),
     ]);
+
     setSelectedLocation({
       lat: latitude,
       lng: longitude,

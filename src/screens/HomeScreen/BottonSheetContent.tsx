@@ -52,6 +52,10 @@ export const BottomSheetContent = ({
       }
 
       const onItemPress = async () => {
+        if (!item.subtitle || !item.title) {
+          return;
+        }
+
         const result = await mapRef.current?.searchCoodinate(item.subtitle);
         setSelectedLocation({
           title: item.title,
