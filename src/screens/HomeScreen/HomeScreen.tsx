@@ -14,6 +14,7 @@ import React, {
 import { Alert, Keyboard, StyleSheet, View } from 'react-native';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
+import { alarm } from 'src/sound';
 import { locationsAtom } from 'src/stores';
 import { BottomSheetContent } from './BottonSheetContent';
 import { LocationBottomSheetContent } from './LocationBottomSheetConent';
@@ -34,6 +35,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   ] = useState<null | SelectedLocation>(null);
   const [radius, setRadius] = useState(500);
   const [registeredLocations] = useAtom(locationsAtom);
+  const [alarmSounding, setAlarmSounding] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -127,7 +129,6 @@ export const HomeScreen = ({ navigation }: Props) => {
   useEffect(() => {
     const subscription = Location.locationUpdateListener(
       async (eventLocation) => {
-        console.log('Run ' + new Date());
         try {
           registeredLocations.forEach((locationData) => {
             const inRadius = isPointWithinRadius(
@@ -136,8 +137,20 @@ export const HomeScreen = ({ navigation }: Props) => {
               locationData.radius
             );
 
-            console.log('inRadius is ' + inRadius + new Date());
+            console.log('inRadius is ' + inRadius + ' ' + new Date());
             if (inRadius) {
+              if (!alarmSounding) {
+                setAlarmSounding(true);
+                console.log('play alarm');
+                alarm.play((success) => {
+                  if (success) {
+                    console.log('successfully finished playing');
+                    setAlarmSounding(false);
+                  } else {
+                    console.log('playback failed due to audio decoding errors');
+                  }
+                });
+              }
               return;
             }
           });
@@ -150,7 +163,7 @@ export const HomeScreen = ({ navigation }: Props) => {
     return () => {
       subscription.remove();
     };
-  }, [registeredLocations]);
+  }, [registeredLocations, alarmSounding, setAlarmSounding]);
 
   const onMapPress = async (event: MapPressEvent) => {
     const { latitude, longitude, address } = event.nativeEvent;

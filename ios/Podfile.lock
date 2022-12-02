@@ -385,6 +385,11 @@ PODS:
   - RNScreens (3.15.0):
     - React-Core
     - React-RCTImage
+  - RNSound (0.11.2):
+    - React-Core
+    - RNSound/Core (= 0.11.2)
+  - RNSound/Core (0.11.2):
+    - React-Core
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -437,6 +442,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSound (from `../node_modules/react-native-sound`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -540,6 +546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSound:
+    :path: "../node_modules/react-native-sound"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -593,6 +601,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: bad495418bcbd3ab47017a38d93d290ebd406f50
   RNReanimated: 2cf7451318bb9cc430abeec8d67693f9cf4e039c
   RNScreens: 4a1af06327774490d97342c00aee0c2bafb497b7
+  RNSound: 6c156f925295bdc83e8e422e7d8b38d33bc71852
   Yoga: ff994563b2fd98c982ca58e8cd9db2cdaf4dda74
 
 PODFILE CHECKSUM: a62700b85d04222bb8e223985b2a8bb1241a3002
