@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AlarmSounding } from 'src/components/AlarmSounding';
 import { RootStack } from 'src/navigations/RootStack';
 import { NavigaitonProvider } from 'src/providers/NavigationProvider';
 import { ToastProvider } from 'src/providers/ToastProvider';
@@ -12,6 +13,7 @@ export default function App() {
         <NavigaitonProvider>
           <Suspense>
             <RootStack />
+            <AlarmSounding />
           </Suspense>
         </NavigaitonProvider>
       </ToastProvider>

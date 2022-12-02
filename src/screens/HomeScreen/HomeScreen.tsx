@@ -138,7 +138,7 @@ export const HomeScreen = ({ navigation }: Props) => {
             );
 
             console.log('inRadius is ' + inRadius + ' ' + new Date());
-            if (inRadius) {
+            if (inRadius && locationData.isOn) {
               if (!alarmSounding) {
                 setAlarmSounding(true);
                 console.log('play alarm');
