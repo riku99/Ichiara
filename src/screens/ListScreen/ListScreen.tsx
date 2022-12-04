@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
   locationTitle: {
     fontWeight: 'bold',
     fontSize: 16,
+    flexShrink: 1,
   },
   suggestedListFotter: {
     height: 16,
