@@ -1,4 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { Text } from '@rneui/themed';
 import { isPointWithinRadius } from 'geolib';
 import { useAtom } from 'jotai';
@@ -11,7 +12,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Alert, Keyboard, StyleSheet, View } from 'react-native';
+import { Alert, Keyboard, StyleSheet, Vibration, View } from 'react-native';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
 import { alarm } from 'src/sound';
@@ -28,7 +29,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const mapRef = useRef<MapView>(null);
   const searchBottomSheetRef = useRef<BottomSheet>(null);
   const locationBottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['12%', '25%', '90%'], []);
+  const snapPoints = useMemo(() => ['12%', '35%', '90%'], []);
   const [region, setRegion] = useState<undefined | Region>(undefined);
   const [
     selectedLocation,
@@ -143,15 +144,31 @@ export const HomeScreen = ({ navigation }: Props) => {
             console.log('inRadius is ' + inRadius + ' ' + new Date());
             if (inRadius && locationData.isOn) {
               if (!soundAlarmLocationId) {
+                PushNotificationIOS.addNotificationRequest({
+                  id: 'nearDestinationNotification',
+                  title: 'もうすぐ目的地です',
+                });
                 setSoundAlarmLocationId(locationData.id);
                 alarm.play((success) => {
                   if (success) {
-                    console.log('successfully finished playing');
                     setSoundAlarmLocationId(null);
                   } else {
                     console.log('playback failed due to audio decoding errors');
                   }
                 });
+
+                if (locationData.vibration) {
+                  let vibrationCount = 0;
+
+                  const id = setInterval(() => {
+                    if (vibrationCount < 5) {
+                      Vibration.vibrate();
+                      vibrationCount += 1;
+                    } else {
+                      clearInterval(id);
+                    }
+                  }, 1000);
+                }
               }
               return;
             }

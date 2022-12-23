@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   registrationButtonContainer: {
-    marginTop: 90,
+    marginTop: 50,
   },
   registrationButtonTitle: {
     fontWeight: 'bold',
