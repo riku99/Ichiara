@@ -1,15 +1,26 @@
+import { useAtom } from 'jotai';
 import { useLayoutEffect } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
+import { showedIntroAtom } from 'src/stores/showedIntro';
 import { theme } from 'src/styles';
 
 type Props = RootNavigationScreenProp<'Intro'>;
 
 export const IntroScreen = ({ navigation }: Props) => {
+  const [_, setShowedIntro] = useAtom(showedIntroAtom);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
+
+  const onPress = () => {
+    setShowedIntro(true);
+    storage.set(mmkvStorageKeys.showedIntroKey, true);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>注意点</Text>
@@ -25,7 +36,7 @@ export const IntroScreen = ({ navigation }: Props) => {
         ・
         地下にいる時など位置情報を正確に取得できない場合正常に動作しない可能性があります。
       </Text>
-      <Pressable style={styles.introButton}>
+      <Pressable style={styles.introButton} onPress={onPress}>
         <Text style={styles.introButtonText}>OK</Text>
       </Pressable>
     </SafeAreaView>
