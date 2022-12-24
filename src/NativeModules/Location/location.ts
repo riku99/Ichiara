@@ -6,6 +6,7 @@ import {
 import {
   AuthorizationChangedEvent,
   Location,
+  LocationAuthorizationStatus,
   LocationUpdateEvent,
 } from './types';
 
@@ -49,4 +50,8 @@ export const locationUpdateListener = (
   );
 
   return emitterSubscription;
+};
+
+export const getAuthorizationStatus = async (): Promise<LocationAuthorizationStatus> => {
+  return await LocationManager.getAuthorizationStatus();
 };

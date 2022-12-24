@@ -42,6 +42,16 @@ class LocationManager: RCTEventEmitter {
   }
   
   @objc
+  func getAuthorizationStatus(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    if #available(iOS 14.0, *) {
+      let status = locationManager.authorizationStatus
+      resolve(locationManager.authorizationStatus.descriptor)
+    } else {
+      resolve(CLLocationManager.authorizationStatus().descriptor)
+    }
+  }
+  
+  @objc
   override func supportedEvents() -> [String]! {
     return ["onAuthorizationStatusDidChange", "onLocationDidUpdate"]
   }

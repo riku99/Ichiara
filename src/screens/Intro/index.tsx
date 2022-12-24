@@ -1,6 +1,8 @@
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { useAtom } from 'jotai';
 import { useLayoutEffect } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text } from 'react-native';
+import * as Location from 'src/nativeModules/Location';
 import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { showedIntroAtom } from 'src/stores/showedIntro';
 import { theme } from 'src/styles';
@@ -16,7 +18,15 @@ export const IntroScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
-  const onPress = () => {
+  const onPress = async () => {
+    await PushNotificationIOS.requestPermissions({
+      alert: true,
+      sound: true,
+      critical: true,
+    });
+
+    await Location.requestWhenInUseAuthorization();
+
     setShowedIntro(true);
     storage.set(mmkvStorageKeys.showedIntroKey, true);
   };

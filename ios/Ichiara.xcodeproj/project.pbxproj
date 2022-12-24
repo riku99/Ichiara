@@ -10,6 +10,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		3269CB52295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3269CB51295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift */; };
 		327257F228A8C4690054B36B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257F128A8C4690054B36B /* MapView.swift */; };
 		327257F528A8C7CD0054B36B /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257F428A8C7CC0054B36B /* MapManager.swift */; };
 		327257F728A8CCC40054B36B /* MapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 327257F628A8CCC40054B36B /* MapManager.m */; };
@@ -32,6 +33,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Ichiara/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Ichiara/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Ichiara/main.m; sourceTree = "<group>"; };
+		3269CB51295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLAuthorizationStatus+descriptor.swift"; sourceTree = "<group>"; };
 		327257F128A8C4690054B36B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		327257F328A8C7AC0054B36B /* Ichiara-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ichiara-Bridging-Header.h"; sourceTree = "<group>"; };
 		327257F428A8C7CC0054B36B /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				327257FB28A904340054B36B /* LocationManager.m */,
 				327257FD28AE6B440054B36B /* LocationManagerError.swift */,
 				327257F328A8C7AC0054B36B /* Ichiara-Bridging-Header.h */,
+				3269CB502957069200A6D793 /* Parsers */,
 				32CBE7D62939741300F8C486 /* alarm.mp3 */,
 			);
 			name = Ichiara;
@@ -93,6 +96,14 @@
 				58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Ichiara.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3269CB502957069200A6D793 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				3269CB51295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift */,
+			);
+			path = Parsers;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -316,6 +327,7 @@
 				327257FC28A904340054B36B /* LocationManager.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				327257F528A8C7CD0054B36B /* MapManager.swift in Sources */,
+				3269CB52295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift in Sources */,
 				327257F228A8C4690054B36B /* MapView.swift in Sources */,
 				327257FA28A903110054B36B /* LocationManager.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

@@ -12,7 +12,14 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Alert, Keyboard, StyleSheet, Vibration, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  Linking,
+  StyleSheet,
+  Vibration,
+  View,
+} from 'react-native';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
 import { alarm } from 'src/sound';
@@ -53,35 +60,25 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    const subscription = Location.authorizationChangedListener(
-      async (event) => {
-        switch (event.status) {
-          case 'authorizedWhenInUse':
-            await Location.requestAlwaysAuthorization();
-            await getCurrentLocation();
-            break;
-          case 'authorizedAlways':
-            await getCurrentLocation();
-            break;
-          case 'denied':
-            Alert.alert(
-              '位置情報の使用が許可されていません',
-              'アプリを使用するには端末の設定から位置情報をオンにしてください。'
-            );
-            break;
-        }
+    const getStatus = async () => {
+      const status = await Location.getAuthorizationStatus();
+      if (status === 'authorizedAlways') {
+        Alert.alert(
+          '位置情報を使用できません',
+          '位置情報の設定を「常に」に変更してください。',
+          [
+            {
+              text: '設定する',
+              onPress: () => {
+                Linking.openSettings();
+              },
+            },
+          ]
+        );
       }
-    );
-
-    return () => {
-      subscription.remove();
     };
-  }, []);
 
-  useEffect(() => {
-    (async () => {
-      await Location.requestWhenInUseAuthorization();
-    })();
+    getStatus();
   }, []);
 
   useEffect(() => {
