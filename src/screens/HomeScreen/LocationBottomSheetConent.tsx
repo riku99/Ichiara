@@ -7,8 +7,12 @@ import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { btoa } from 'react-native-quick-base64';
 import { useToast } from 'react-native-toast-notifications';
 import { RadiusMenu } from 'src/components/RadiusMenu';
+import { alartLocationAuth } from 'src/helpers/alartLocationAuth';
 import { MapView } from 'src/nativeComponents/MapView';
-import { getCurrentLocation } from 'src/nativeModules/Location';
+import {
+  getAuthorizationStatus,
+  getCurrentLocation,
+} from 'src/nativeModules/Location';
 import { locationsAtom } from 'src/stores';
 import { formatRadius } from 'src/utils';
 import { SelectedLocation } from './type';
@@ -38,6 +42,13 @@ export const LocationBottomSheetContent = ({
   const onReistrationButtonPress = async () => {
     try {
       if (!selectedLocation) {
+        return;
+      }
+
+      const status = await getAuthorizationStatus();
+
+      if (status !== 'authorizedAlways') {
+        alartLocationAuth();
         return;
       }
 
