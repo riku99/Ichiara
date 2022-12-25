@@ -13,16 +13,19 @@ import React, {
   useState,
 } from 'react';
 import {
-  Alert,
+  AppState,
+  AppStateStatus,
   Keyboard,
-  Linking,
   StyleSheet,
   Vibration,
   View,
 } from 'react-native';
+import { alartLocationAuth } from 'src/helpers/alartLocationAuth';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
+import { getAuthorizationStatus } from 'src/nativeModules/Location';
 import { alarm } from 'src/sound';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { locationsAtom } from 'src/stores';
 import { soundAlarmLocationIdAtom } from 'src/stores/';
 import { BottomSheetContent } from './BottonSheetContent';
@@ -59,26 +62,61 @@ export const HomeScreen = ({ navigation }: Props) => {
     setRegion(location);
   };
 
+  // アプリ全体で一回のみ位置情報のリクエスト
   useEffect(() => {
-    const getStatus = async () => {
-      const status = await Location.getAuthorizationStatus();
-      if (status === 'authorizedAlways') {
-        Alert.alert(
-          '位置情報を使用できません',
-          '位置情報の設定を「常に」に変更してください。',
-          [
-            {
-              text: '設定する',
-              onPress: () => {
-                Linking.openSettings();
-              },
-            },
-          ]
-        );
+    const run = async () => {
+      const requestedFirstLocationAuthInStorage = storage.getBoolean(
+        mmkvStorageKeys.requestedFirstLocationAuth
+      );
+
+      if (requestedFirstLocationAuthInStorage) {
+        const status = await getAuthorizationStatus();
+        if (status !== 'authorizedAlways') {
+          alartLocationAuth();
+        }
+      } else {
+        storage.set(mmkvStorageKeys.requestedFirstLocationAuth, true);
+        Location.requestWhenInUseAuthorization();
       }
     };
 
-    getStatus();
+    run();
+  }, []);
+
+  useEffect(() => {
+    const subscription = Location.authorizationChangedListener(
+      async (event) => {
+        switch (event.status) {
+          case 'authorizedWhenInUse':
+            await Location.requestAlwaysAuthorization();
+            break;
+          case 'authorizedAlways':
+            await getCurrentLocation();
+            break;
+        }
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  useEffect(() => {
+    const onChange = async (nextState: AppStateStatus) => {
+      if (nextState === 'active') {
+        const status = await Location.getAuthorizationStatus();
+        if (status !== 'authorizedAlways') {
+          alartLocationAuth();
+        }
+      }
+    };
+
+    const subscription = AppState.addEventListener('change', onChange);
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   useEffect(() => {
