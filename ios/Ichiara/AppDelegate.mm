@@ -10,6 +10,8 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+#import "RNBootSplash.h"
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -63,6 +65,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
 
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; 
 
   return YES;
 }

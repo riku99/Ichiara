@@ -11,6 +11,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3269CB52295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3269CB51295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift */; };
+		3269CB54295AE75E00A6D793 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3269CB53295AE75D00A6D793 /* BootSplash.storyboard */; };
 		327257F228A8C4690054B36B /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257F128A8C4690054B36B /* MapView.swift */; };
 		327257F528A8C7CD0054B36B /* MapManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327257F428A8C7CC0054B36B /* MapManager.swift */; };
 		327257F728A8CCC40054B36B /* MapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 327257F628A8CCC40054B36B /* MapManager.m */; };
@@ -34,6 +35,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Ichiara/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Ichiara/main.m; sourceTree = "<group>"; };
 		3269CB51295706F800A6D793 /* CLAuthorizationStatus+descriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLAuthorizationStatus+descriptor.swift"; sourceTree = "<group>"; };
+		3269CB53295AE75D00A6D793 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = Ichiara/BootSplash.storyboard; sourceTree = "<group>"; };
 		327257F128A8C4690054B36B /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		327257F328A8C7AC0054B36B /* Ichiara-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ichiara-Bridging-Header.h"; sourceTree = "<group>"; };
 		327257F428A8C7CC0054B36B /* MapManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapManager.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				3269CB53295AE75D00A6D793 /* BootSplash.storyboard */,
 				327257F128A8C4690054B36B /* MapView.swift */,
 				327257F428A8C7CC0054B36B /* MapManager.swift */,
 				327257F628A8CCC40054B36B /* MapManager.m */,
@@ -234,6 +237,7 @@
 				327257F828A8E8D80054B36B /* main.jsbundle in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				3269CB54295AE75E00A6D793 /* BootSplash.storyboard in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				32CBE7D72939741300F8C486 /* alarm.mp3 in Resources */,
 			);
