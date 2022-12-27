@@ -13,6 +13,7 @@ import React, {
   useState,
 } from 'react';
 import {
+  Alert,
   AppState,
   AppStateStatus,
   Keyboard,
@@ -75,8 +76,8 @@ export const HomeScreen = ({ navigation }: Props) => {
           alartLocationAuth();
         }
       } else {
+        await Location.requestWhenInUseAuthorization();
         storage.set(mmkvStorageKeys.requestedFirstLocationAuth, true);
-        Location.requestWhenInUseAuthorization();
       }
     };
 
@@ -102,12 +103,24 @@ export const HomeScreen = ({ navigation }: Props) => {
     };
   }, []);
 
+  const isInitialActiveCall = useRef(true);
+
   useEffect(() => {
     const onChange = async (nextState: AppStateStatus) => {
       if (nextState === 'active') {
-        const status = await Location.getAuthorizationStatus();
-        if (status !== 'authorizedAlways') {
-          alartLocationAuth();
+        if (isInitialActiveCall.current) {
+          isInitialActiveCall.current = false;
+        } else {
+          const requestedFirstLocationAuthInStorage = storage.getBoolean(
+            mmkvStorageKeys.requestedFirstLocationAuth
+          );
+
+          if (requestedFirstLocationAuthInStorage) {
+            const status = await Location.getAuthorizationStatus();
+            if (status !== 'authorizedAlways') {
+              alartLocationAuth();
+            }
+          }
         }
       }
     };
@@ -176,7 +189,7 @@ export const HomeScreen = ({ navigation }: Props) => {
               locationData.radius
             );
 
-            console.log('inRadius is ' + inRadius + ' ' + new Date());
+            console.log('📍inRadius is ' + inRadius + ' ' + new Date());
             if (inRadius && locationData.isOn) {
               if (!soundAlarmLocationId) {
                 PushNotificationIOS.addNotificationRequest({
@@ -188,7 +201,11 @@ export const HomeScreen = ({ navigation }: Props) => {
                   if (success) {
                     setSoundAlarmLocationId(null);
                   } else {
-                    console.log('playback failed due to audio decoding errors');
+                    if (__DEV__) {
+                      Alert.alert(
+                        'playback failed due to audio decoding errors'
+                      );
+                    }
                   }
                 });
 

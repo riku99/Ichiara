@@ -9,7 +9,7 @@ export const AlarmSounding = () => {
   const [soundAlarmLocationId, setSoundAlarmLocationId] = useAtom(
     soundAlarmLocationIdAtom
   );
-  const [locations, setLocations] = useAtom(locationsAtom);
+  const [_, setLocations] = useAtom(locationsAtom);
 
   const onStopButtonPress = () => {
     setSoundAlarmLocationId(null);

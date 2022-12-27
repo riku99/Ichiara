@@ -10,7 +10,7 @@ class LocationManager: RCTEventEmitter {
     super.init()
     locationManager.delegate = self
     locationManager.desiredAccuracy = kCLLocationAccuracyBest
-    locationManager.distanceFilter = 5
+    locationManager.distanceFilter = 2
     locationManager.allowsBackgroundLocationUpdates = true
   }
   
