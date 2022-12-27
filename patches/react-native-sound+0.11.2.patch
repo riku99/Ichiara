@@ -1,0 +1,14 @@
+diff --git a/node_modules/react-native-sound/RNSound/RNSound.m b/node_modules/react-native-sound/RNSound/RNSound.m
+index df3784e..ac52e94 100644
+--- a/node_modules/react-native-sound/RNSound/RNSound.m
++++ b/node_modules/react-native-sound/RNSound/RNSound.m
+@@ -175,8 +175,7 @@ - (NSDictionary *)constantsToExport {
+     if (category) {
+         if (mixWithOthers) {
+             [session setCategory:category
+-                     withOptions:AVAudioSessionCategoryOptionMixWithOthers |
+-                                 AVAudioSessionCategoryOptionAllowBluetooth
++                     withOptions:AVAudioSessionCategoryOptionMixWithOthers | AVAudioSessionCategoryOptionDuckOthers
+                            error:nil];
+         } else {
+             [session setCategory:category error:nil];
