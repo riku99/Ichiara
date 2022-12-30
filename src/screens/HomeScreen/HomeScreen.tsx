@@ -21,7 +21,7 @@ import {
   Vibration,
   View,
 } from 'react-native';
-import { alartLocationAuth } from 'src/helpers/alartLocationAuth';
+import { useAlertLocationAuth } from 'src/helpers/alertLocationAuth';
 import { MapPressEvent, MapView, Region } from 'src/nativeComponents/MapView';
 import * as Location from 'src/nativeModules/Location';
 import { getAuthorizationStatus } from 'src/nativeModules/Location';
@@ -51,6 +51,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const [soundAlarmLocationId, setSoundAlarmLocationId] = useAtom(
     soundAlarmLocationIdAtom
   );
+  const { alertLocationAuth } = useAlertLocationAuth();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -72,8 +73,8 @@ export const HomeScreen = ({ navigation }: Props) => {
 
       if (requestedFirstLocationAuthInStorage) {
         const status = await getAuthorizationStatus();
-        if (status !== 'authorizedAlways') {
-          alartLocationAuth();
+        if (status === 'authorizedAlways') {
+          await getCurrentLocation();
         }
       } else {
         await Location.requestWhenInUseAuthorization();
@@ -103,14 +104,14 @@ export const HomeScreen = ({ navigation }: Props) => {
     };
   }, []);
 
-  const isInitialActiveCall = useRef(true);
-
   useEffect(() => {
     const onChange = async (nextState: AppStateStatus) => {
       if (nextState === 'active') {
-        if (isInitialActiveCall.current) {
-          isInitialActiveCall.current = false;
-        } else {
+        const calledFirstActiveAction = storage.getBoolean(
+          mmkvStorageKeys.calledFirstActiveToAuthStatus
+        );
+
+        if (calledFirstActiveAction) {
           const requestedFirstLocationAuthInStorage = storage.getBoolean(
             mmkvStorageKeys.requestedFirstLocationAuth
           );
@@ -118,9 +119,11 @@ export const HomeScreen = ({ navigation }: Props) => {
           if (requestedFirstLocationAuthInStorage) {
             const status = await Location.getAuthorizationStatus();
             if (status !== 'authorizedAlways') {
-              alartLocationAuth();
+              alertLocationAuth();
             }
           }
+        } else {
+          storage.set(mmkvStorageKeys.calledFirstActiveToAuthStatus, true);
         }
       }
     };
@@ -133,10 +136,15 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, []);
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+    }
+  }, []);
+
+  useEffect(() => {
     if (!selectedLocation) {
       (async () => {
         if (isInitialRender.current) {
-          isInitialRender.current = false;
           return;
         } else {
           locationBottomSheetRef.current?.close();

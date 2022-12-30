@@ -7,7 +7,7 @@ import { Alert, Pressable, StyleSheet, Switch, View } from 'react-native';
 import { btoa } from 'react-native-quick-base64';
 import { useToast } from 'react-native-toast-notifications';
 import { RadiusMenu } from 'src/components/RadiusMenu';
-import { alartLocationAuth } from 'src/helpers/alartLocationAuth';
+import { useAlertLocationAuth } from 'src/helpers/alertLocationAuth';
 import { MapView } from 'src/nativeComponents/MapView';
 import {
   getAuthorizationStatus,
@@ -34,6 +34,7 @@ export const LocationBottomSheetContent = ({
   const [vibration, setVibration] = useState(true);
   const [locations, setLocations] = useAtom(locationsAtom);
   const toast = useToast();
+  const { alertLocationAuth } = useAlertLocationAuth();
 
   const onClosePress = () => {
     setSelectedLocation(null);
@@ -48,7 +49,7 @@ export const LocationBottomSheetContent = ({
       const status = await getAuthorizationStatus();
 
       if (status !== 'authorizedAlways') {
-        alartLocationAuth();
+        alertLocationAuth();
         return;
       }
 

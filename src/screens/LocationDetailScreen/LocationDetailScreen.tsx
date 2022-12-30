@@ -1,7 +1,7 @@
 import { Text } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { RadiusMenu } from 'src/components/RadiusMenu';
 import { Switch } from 'src/components/Switch';
 import { VStack } from 'src/components/VStack';
@@ -61,9 +61,13 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
         });
       })();
     }
-  }, [location.lat, location.lng, location.radius]);
+  }, [location?.lat, location?.lng, location?.radius]);
 
   const onVibrationChange = (value: boolean) => {
+    if (!location) {
+      return;
+    }
+
     setLocation({
       ...location,
       vibration: value,
@@ -71,9 +75,24 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
   };
 
   const onChangeRadius = (radius: number) => {
+    if (!location) {
+      return;
+    }
+
     setLocation({
       ...location,
       radius,
+    });
+  };
+
+  const onChangeTitle = (t: string) => {
+    if (!location) {
+      return;
+    }
+
+    setLocation({
+      ...location,
+      title: t,
     });
   };
 
@@ -97,13 +116,12 @@ export const LocationDetailScreen = ({ navigation, route }: Props) => {
         />
         <VStack space={22} style={styles.contents}>
           <View>
-            <Text style={styles.itemLabel}>
-              場所{'  '}
-              <Text style={styles.locatoinAlertText}>
-                ※場所を変更することはできません
-              </Text>
-            </Text>
-            <Text style={styles.itemText}>{location.title}</Text>
+            <Text style={styles.itemLabel}>表示名</Text>
+            <TextInput
+              defaultValue={location.title}
+              style={[styles.itemText]}
+              onChangeText={onChangeTitle}
+            />
           </View>
 
           <RadiusMenu onChangeRadius={onChangeRadius}>
